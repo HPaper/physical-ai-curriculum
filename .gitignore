@@ -1,0 +1,19 @@
+# 내부 문서 (팀 동료 미공개 자료 — 저장소에 포함하지 않음)
+ref/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+
+# OS / 에디터
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.vscode/
+.idea/
+
+# matplotlib 캐시 등 임시물
+*.tmp
