@@ -21,12 +21,12 @@
 | 3 · 로봇의 물리(동역학) | 9–13 | ✅ v3 |
 | 4 · 구동(액추에이터) | 14–16 | ✅ v3 |
 | 5 · 제어 | 17–24 | ✅ v3 |
-| 6 · 딥러닝 기초 | 25–28 | ⬜ 미작성 |
+| 6 · 딥러닝 기초 | 25–28 | ✅ v3 |
 | 7 · Transformer·LLM | 29–33 | ⬜ 미작성 |
 | 8 · VLM | 34–36 | ⬜ 미작성 |
 | 9 · 행동을 배우다 | 37–41 | ⬜ 미작성 |
-| 10 · VLA 계보 | 42–48 | 🟡 v2 (증보 예정) |
-| 11 · 실물 통합 | 49–50 | 🟡 v2 (증보 예정) |
+| 10 · VLA 계보 | 42–48 | ✅ v3 |
+| 11 · 실물 통합 | 49–50 | ✅ v3 |
 | 12 · 환경·시뮬레이션 | 51–54 | 부분(52 ✅ v3 · 51·53·54 ⬜) |
 | 13 · 데이터·평가 | 55–57 | ⬜ 미작성 |
 | 14 · 시스템 통합 | 58–62 | ✅ v3 |
@@ -43,7 +43,7 @@ part02-kinematics/             1–8   로봇의 몸: DoF·SO(3)·SE(3)·FK·자
 part03-dynamics/               9–13  동역학·접촉·보행
 part04-actuators/              14–16 모터·감속기·QDD
 part05-control/                17–24 PID→LQR→computed torque→임피던스→MPC→WBC
-part06-deep-learning/          25–28 딥러닝 기초           (예정)
+part06-deep-learning/          25–28 딥러닝 기초           ✅ 작성완료
 part07-transformers-llm/       29–33 Transformer·LLM       (예정)
 part08-vlm/                    34–36 VLM                   (예정)
 part09-robot-learning/         37–41 모방·생성·RL          (예정)
@@ -193,10 +193,10 @@ images/lecNN/                  강의별 그림 + 재현 스크립트(gen_figs.p
 
 | # | 제목 | 핵심 내용 | 실습 |
 |---|---|---|---|
-| 25 | 딥러닝, 왜 로봇에 필요한가 | 왜 역기구학+PID로는 빨래를 못 개는가. 룰베이스 → 학습 기반 패러다임 전환(0강 지도 위에서 AI 파트 로드맵) | 없음 (오리엔테이션) |
-| 26 | 신경망 = 함수 근사기 | MLP, 활성함수, 경사하강법, 역전파. **비유: 최적화 기반 제어기 튜닝의 일반화** | Karpathy micrograd; 2링크 IK를 MLP로 근사 |
-| 27 | 학습 파이프라인 해부 | 데이터셋/손실함수/미니배치/과적합/일반화. GPU가 하는 일 | PyTorch 학습 루프 바닥부터 |
-| 28 ★ | CNN과 시각 표현 | 합성곱, 계층적 특징, 사전학습(ImageNet), ResNet + detection/SAM·affordance 조감 | 사전학습 ResNet 전이학습 |
+| [25](part06-deep-learning/lec25-why-deep-learning.md) | 딥러닝, 왜 로봇에 필요한가 | 왜 역기구학+PID로는 빨래를 못 개는가. 룰베이스 → 학습 기반 패러다임 전환(0강 지도 위에서 AI 파트 로드맵) | 없음 (오리엔테이션) |
+| [26](part06-deep-learning/lec26-neural-networks-function-approximation.md) | 신경망 = 함수 근사기 | MLP, 활성함수, 경사하강법, 역전파. **비유: 최적화 기반 제어기 튜닝의 일반화** | Karpathy micrograd; 2링크 IK를 MLP로 근사 |
+| [27](part06-deep-learning/lec27-training-pipeline.md) | 학습 파이프라인 해부 | 데이터셋/손실함수/미니배치/과적합/일반화. GPU가 하는 일 | PyTorch 학습 루프 바닥부터 |
+| [28](part06-deep-learning/lec28-cnn-visual-representations.md) ★ | CNN과 시각 표현 | 합성곱, 계층적 특징, 사전학습(ImageNet), ResNet + detection/SAM·affordance 조감 | 사전학습 ResNet 전이학습 |
 
 핵심 자료: 3Blue1Brown, Karpathy "Zero to Hero" 1-4, CS231n.
 
