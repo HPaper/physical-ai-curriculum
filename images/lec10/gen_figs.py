@@ -150,4 +150,77 @@ fig.tight_layout()
 fig.savefig(__file__.replace('gen_figs.py', 'fig3_gravity_landscape.png'), dpi=140)
 plt.close(fig)
 
+# ---------- 그림 4: 수동성 — dE/dt = q̇ᵀτ (보존 / 댐핑 소산 / PD 정착) ----------
+# E3의 수동성 항등식을 시뮬레이션으로 검증한다: 세 가지 입력 τ 시나리오에서
+# 로봇 에너지 변화 E(t)−E(0)와, 입력 일률의 시간적분 ∫ q̇ᵀτ dt 가 정확히 겹친다.
+def rhs_tau(t, s, tau_fn):
+    q, qd = s[:2], s[2:]
+    tau = tau_fn(q, qd)
+    qdd = np.linalg.solve(M_mat(q), tau - C_mat(q, qd) @ qd - g_vec(q))
+    return np.concatenate([qd, qdd])
+
+def total_E(col):
+    q, qd = col[:2], col[2:]
+    return kinetic(q, qd) + V_pot(q[0], q[1])
+
+# 세 시나리오: (색, 라벨, τ(q,q̇)). PD는 실습 4-②의 설정.
+b_damp = 0.8
+Kp = np.diag([6.0, 6.0]); Kd = np.diag([2.0, 2.0]); q_des = np.array([0.2, -0.3])
+scenarios = [
+    ('C0', 'τ=0 (보존)',            lambda q, qd: np.zeros(2)),
+    ('C3', 'τ=−b·q̇ (관절 댐핑)',   lambda q, qd: -b_damp*qd),
+    ('C1', 'τ=−Kp(q−q_d)−Kd·q̇ (PD)', lambda q, qd: -Kp @ (q - q_des) - Kd @ qd),
+]
+
+q0p = np.array([1.2, 0.5]); s0p = np.concatenate([q0p, np.zeros(2)])
+Tp = 6.0
+tp = np.linspace(0, Tp, 700)
+
+def Mdot_mat(q, qd):
+    # Ṁ = (∂M/∂q₂)·q̇₂  — 2링크에서 M은 q₂에만 의존
+    s2 = np.sin(q[1])
+    dM11 = -2*m2*l1*lc2*s2*qd[1]
+    dM12 = -m2*l1*lc2*s2*qd[1]
+    return np.array([[dM11, dM12], [dM12, 0.0]])
+
+fig, (axL, axR) = plt.subplots(1, 2, figsize=(11, 4.4))
+for color, label, tau_fn in scenarios:
+    solp = solve_ivp(lambda t, s: rhs_tau(t, s, tau_fn), [0, Tp], s0p,
+                     rtol=1e-9, atol=1e-11, t_eval=tp)
+    Sp = solp.y
+    Et = np.array([total_E(Sp[:, k]) for k in range(Sp.shape[1])])
+    dE = Et - Et[0]
+    # 입력 일률 P(t) = q̇ᵀτ 와 그 시간적분 (수동성 우변)
+    P = np.array([Sp[2:, k] @ tau_fn(Sp[:2, k], Sp[2:, k]) for k in range(Sp.shape[1])])
+    work = np.concatenate([[0.0], np.cumsum(0.5*(P[1:]+P[:-1])*np.diff(tp))])
+    axL.plot(tp, dE, color=color, lw=2.4, label=label)
+    # ∫q̇ᵀτ dt 를 흰 점선으로 덧그려 두 곡선이 겹침을 보인다
+    axL.plot(tp, work, color='w', ls=(0, (2, 2)), lw=1.3, alpha=0.9, zorder=4)
+    # 오른쪽: 순간 항등식 잔차. dE/dt를 유한차분이 아니라 구조식으로 계산한다:
+    #   dE/dt = q̇ᵀMq̈ + ½q̇ᵀṀq̇ + q̇ᵀg,  q̈ = M⁻¹(τ − Cq̇ − g)
+    # E3의 항등식이 성립하면 이 값은 q̇ᵀτ와 부동소수점 오차까지 같다.
+    res = np.empty(Sp.shape[1])
+    for k in range(Sp.shape[1]):
+        q, qd = Sp[:2, k], Sp[2:, k]
+        qdd = np.linalg.solve(M_mat(q), tau_fn(q, qd) - C_mat(q, qd) @ qd - g_vec(q))
+        dEdt = qd @ M_mat(q) @ qdd + 0.5*qd @ Mdot_mat(q, qd) @ qd + qd @ g_vec(q)
+        res[k] = dEdt - qd @ tau_fn(q, qd)
+    axR.plot(tp, res, color=color, lw=1.6, label=label)
+
+axL.axhline(0, color='gray', lw=0.8, ls=':')
+axL.plot([], [], color='k', ls=(0, (2, 2)), lw=1.3, label=r'$\int \dot q^{\top}\tau\, dt$ (겹침)')
+axL.set_xlabel('시간 t [s]'); axL.set_ylabel('E(t) − E(0) [J]')
+axL.set_title('(a) 로봇 에너지 변화 = 입력 일률의 적분')
+axL.legend(fontsize=8.5, loc='lower left'); axL.grid(alpha=0.3)
+
+axR.axhline(0, color='gray', lw=0.8, ls=':')
+axR.set_xlabel('시간 t [s]'); axR.set_ylabel(r'$dE/dt - \dot q^{\top}\tau$  [W]')
+axR.set_title('(b) 수동성 잔차 ≈ 0 (기계 정밀도)')
+axR.legend(fontsize=8.5, loc='upper right'); axR.grid(alpha=0.3)
+axR.ticklabel_format(axis='y', style='sci', scilimits=(0, 0))
+
+fig.tight_layout()
+fig.savefig(__file__.replace('gen_figs.py', 'fig4_passivity.png'), dpi=140)
+plt.close(fig)
+
 print("figures written")

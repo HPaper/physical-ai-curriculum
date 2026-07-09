@@ -1,5 +1,5 @@
 # Lec R06 그림 생성 스크립트
-# 실행: python3 gen_figs.py  (출력: fig1~fig3 PNG, 이 디렉토리에 저장)
+# 실행: python3 gen_figs.py  (출력: fig1~fig4 PNG, 이 디렉토리에 저장)
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -188,6 +188,113 @@ ax.set_title(f'(b) null-space에서 ∇w 등반: w {traj_w[0]:.3f} → {traj_w[-
 ax.grid(alpha=0.3)
 fig.tight_layout()
 fig.savefig(f'{OUT}/fig3_nullspace_motion.png', dpi=140)
+plt.close(fig)
+
+# ---------------- fig 4: J = UΣVᵀ 파이프라인 (회전→늘이기→회전) ----------------
+# E1을 그대로 시각화: 단위 관절속도 원 → V^T(회전) → Σ(축별 늘이기) → U(회전) = 조작성 타원.
+# 건강한 자세 vs 특이점 근처 자세를 비교해, σ_min→0에서 타원이 바늘로 붕괴하고
+# 잃은 EEF 방향 u_min / null 관절 방향 v_min 을 U·V에서 직접 읽는다. (l1=l2=1, WE-1 조건)
+th = np.linspace(0, 2*np.pi, 200)
+circ = np.vstack([np.cos(th), np.sin(th)])          # 단위 관절속도 원 {||q̇||=1}
+
+def _draw_axes(ax, lim):
+    ax.axhline(0, color='0.7', lw=0.6, zorder=0)
+    ax.axvline(0, color='0.7', lw=0.6, zorder=0)
+    ax.set_aspect('equal'); ax.set_xlim(-lim, lim); ax.set_ylim(-lim, lim)
+    ax.set_xticks([]); ax.set_yticks([])
+
+def svd_pipeline(fig, gs_row, q, tag, healthy=True):
+    J = J2R(q, 1.0, 1.0)
+    U, S, Vt = np.linalg.svd(J)
+    V = Vt.T
+    # 부호 정규화(보기 좋게): 각 특이 방향의 x성분이 음수면 뒤집는다
+    for k in range(2):
+        if U[0, k] < 0: U[:, k] = -U[:, k]
+        if V[0, k] < 0: V[:, k] = -V[:, k]
+    col = ['#1f77b4', '#d62728']                     # σ1(파랑), σ2(빨강)
+    lim = 2.6
+
+    # 패널 1: 입력 공간 — 단위 원 + V의 두 방향(주축)
+    ax = fig.add_subplot(gs_row[0]); _draw_axes(ax, lim)
+    ax.plot(circ[0], circ[1], color='0.4', lw=1.8)
+    for k in range(2):
+        ax.annotate('', xy=V[:, k], xytext=(0, 0),
+                    arrowprops=dict(arrowstyle='-|>', color=col[k], lw=2.2))
+        ax.text(1.28*V[0, k], 1.28*V[1, k], f'$v_{k+1}$', color=col[k],
+                fontsize=11, ha='center', va='center')
+    ax.set_title(f'① 관절속도 공간\n단위원 + 주입력방향 $V$', fontsize=10)
+    ax.set_xlabel('$\\dot q_1$', fontsize=9); ax.set_ylabel('$\\dot q_2$', fontsize=9)
+
+    # 패널 2: Σ 적용 후(아직 U 회전 전) — 축정렬 타원, 반축 = σ_i
+    ax = fig.add_subplot(gs_row[1]); _draw_axes(ax, lim)
+    ell = np.diag(S) @ (Vt @ circ)                   # ΣVᵀ·(원): 축정렬 타원
+    ax.plot(ell[0], ell[1], color='0.4', lw=1.8)
+    for k in range(2):
+        e = np.zeros(2); e[k] = S[k]
+        ax.annotate('', xy=e, xytext=(0, 0),
+                    arrowprops=dict(arrowstyle='-|>', color=col[k], lw=2.2))
+        ax.text(e[0] + (0.18 if k == 0 else 0.0), e[1] + (0.0 if k == 0 else 0.22),
+                f'$\\sigma_{k+1}$={S[k]:.2f}', color=col[k], fontsize=10,
+                ha='left' if k == 0 else 'center')
+    ax.set_title('② $\\Sigma$: 축별로 $\\sigma_i$배 늘이기', fontsize=10)
+
+    # 패널 3: U 회전 후 = 조작성 타원 (EEF 속도 공간)
+    ax = fig.add_subplot(gs_row[2]); _draw_axes(ax, lim)
+    manip_ell = J @ circ                             # = UΣVᵀ·(원)
+    ax.plot(manip_ell[0], manip_ell[1], color='0.4', lw=1.8)
+    ax.fill(manip_ell[0], manip_ell[1], color='0.4', alpha=0.10)
+    for k in range(2):
+        a = S[k] * U[:, k]
+        ax.annotate('', xy=a, xytext=(0, 0),
+                    arrowprops=dict(arrowstyle='-|>', color=col[k], lw=2.2))
+        ax.text(1.14*a[0], 1.14*a[1] + (0.16 if k == 1 else 0.0),
+                f'$\\sigma_{k+1}u_{k+1}$', color=col[k], fontsize=10,
+                ha='center', va='center')
+    if not healthy:
+        # 잃어가는 EEF 방향(σ2 u2)을 강조
+        ax.annotate('잃어가는\n방향 $u_2$', xy=1.02*S[1]*U[:, 1],
+                    xytext=(-1.7, 1.7), color=col[1], fontsize=9,
+                    arrowprops=dict(arrowstyle='->', color=col[1], lw=1.3))
+    ax.set_title('③ $U$: EEF 속도 공간의 조작성 타원', fontsize=10)
+    ax.set_xlabel('$\\dot x$ [m/s]', fontsize=9); ax.set_ylabel('$\\dot y$ [m/s]', fontsize=9)
+
+    q2deg = np.rad2deg(q[1])
+    kappa = S[0] / S[1] if S[1] > 1e-12 else np.inf
+    ktxt = '∞' if not np.isfinite(kappa) else f'{kappa:.0f}'
+    return S, U, V, q2deg, ktxt
+
+import matplotlib.gridspec as gridspec
+fig = plt.figure(figsize=(12, 7.4))
+outer = gridspec.GridSpec(2, 1, height_ratios=[1, 1], hspace=0.42)
+poses = [
+    (np.array([0.0, np.pi/2]), '건강한 자세  $q_2$=90°', True),
+    (np.array([0.0, np.deg2rad(8.0)]), '특이점 근처  $q_2$=8°', False),
+]
+row_info = []
+for r, (q, label, healthy) in enumerate(poses):
+    gs_row = gridspec.GridSpecFromSubplotSpec(1, 3, subplot_spec=outer[r], wspace=0.28)
+    S, U, V, q2deg, ktxt = svd_pipeline(fig, gs_row, q, label, healthy)
+    row_info.append((label, S, ktxt))
+
+# 행 제목(세로 라벨)과 행별 스펙트럼 요약을 배치.
+# 스펙트럼 요약은 각 행 패널 ①/②/③ 사이의 세로 중앙 빈틈에 박스로 얹는다(제목과 안 겹침).
+label_y = [0.74, 0.30]     # 세로 라벨: 각 행 패널의 세로 중앙
+gap_y   = [0.74, 0.30]     # 스펙트럼 박스: 각 행 세로 중앙
+for r, (label, S, ktxt) in enumerate(row_info):
+    w = S[0]*S[1]
+    fig.text(0.012, label_y[r], label, rotation=90, va='center', ha='left',
+             fontsize=11, fontweight='bold', color='#333')
+    # ①-② 사이 빈틈(x≈0.365)과 ②-③ 사이 빈틈(x≈0.675) 중 왼쪽 빈틈에 배치
+    fig.text(0.365, gap_y[r] + 0.135,
+             f'$\\sigma$=({S[0]:.2f}, {S[1]:.2f})\n$w$={w:.2f}   $\\kappa$={ktxt}',
+             va='center', ha='center', fontsize=9.5, color='#444',
+             bbox=dict(boxstyle='round,pad=0.3', fc='#f7f7f7', ec='#bbb', lw=0.8))
+
+fig.suptitle('$J = U\\Sigma V^\\top$: 단위 관절속도 원이 조작성 타원으로 (E1)\n'
+             '위=통통한 타원(어디든 잘 감), 아래=$\\sigma_2$가 작아 바늘로 붕괴 ($u_2$ 방향이 사라짐)',
+             fontsize=12.5, y=0.99)
+fig.subplots_adjust(left=0.055, right=0.985, top=0.84, bottom=0.06)
+fig.savefig(f'{OUT}/fig4_svd_pipeline.png', dpi=140)
 plt.close(fig)
 
 print('figures written to', OUT)

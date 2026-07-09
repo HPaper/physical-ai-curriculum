@@ -1,6 +1,7 @@
 """Lec R07 그림 생성 스크립트.
 실행: python3 gen_figs.py  (이 디렉토리에서)
-출력: fig1_elbow_updown.png, fig2_newton_vs_dls.png, fig3_basin_map.png
+출력: fig1_elbow_updown.png, fig2_newton_vs_dls.png, fig3_basin_map.png,
+      fig4_dls_lambda_sweep.png
 """
 import matplotlib
 matplotlib.use('Agg')
@@ -149,6 +150,75 @@ ax.set_title('Newton IK의 수렴 분지(basin): 초기값이 해를 고른다\n
 ax.legend(loc='lower left', fontsize=9, framealpha=0.9)
 fig.tight_layout()
 fig.savefig('fig3_basin_map.png', dpi=140)
+plt.close(fig)
+
+# ---------------- fig4: λ 스윕 — 특이점 통과 안정성 (E3 시각화 + 실습2) ----------------
+# (a) E3의 특이값 증폭률: Newton의 1/σ 와 DLS의 σ/(σ²+λ²).
+#     최대값이 σ=λ 에서 정확히 1/(2λ) 임을 세 λ에 대해 보인다.
+# (b) 실습 2의 경로 추종: 직선 (1.5,0.8)→(1.5,-0.8) 을 warm-start 로 따라가며
+#     스텝당 최대 ‖Δq‖. |y|>√(1.6²−1.5²)≈0.557 인 양 끝이 작업공간 바깥 —
+#     Newton은 경계를 넘나드는 순간 스텝이 폭발하고, DLS는 λ가 스텝 상한을 통제한다.
+
+def track_step(method, lam, path, iters=20, q_start=(0.5, 1.0)):
+    """직선 경로를 warm start 로 추종. 스텝당 최대 ‖Δq‖ 이력을 반환."""
+    q = np.array(q_start, float)
+    maxstep = []
+    for xd in path:
+        st = 0.0
+        for _ in range(iters):
+            e = xd - fk(q); J = jac(q)
+            if method == 'newton':
+                dq = np.linalg.pinv(J) @ e
+            else:
+                dq = J.T @ np.linalg.solve(J @ J.T + lam**2*np.eye(2), e)
+            st = max(st, np.linalg.norm(dq))
+            q = q + dq
+        maxstep.append(st)
+    return np.array(maxstep)
+
+fig, axes = plt.subplots(1, 2, figsize=(11.5, 4.4))
+
+# (a) 특이값 증폭률
+ax = axes[0]
+sig = np.linspace(1e-3, 1.4, 600)
+ax.plot(sig, 1.0/sig, '--', color='tab:red', lw=2, label='Newton  $1/\\sigma$ (상한 없음)')
+lam_list = [0.05, 0.1, 0.3]
+colors = ['#1a5fb4', '#3584e4', '#99c1f1']
+for lam, col in zip(lam_list, colors):
+    amp = sig/(sig**2 + lam**2)
+    ax.plot(sig, amp, '-', color=col, lw=2.2,
+            label=f'DLS λ={lam}:  최대 $1/2\\lambda$={1/(2*lam):.1f}')
+    ax.plot(lam, 1/(2*lam), 'o', color=col, markersize=7, markeredgecolor='k', zorder=5)
+ax.set_ylim(0, 22)
+ax.set_xlabel('특이값 $\\sigma$  [m/rad]')
+ax.set_ylabel('증폭률  $\\Delta q$ / $e$')
+ax.set_title('(a) E3의 특이값 증폭률: $\\sigma\\!\\to\\!0$ 에서\nNewton은 발산, DLS는 $\\sigma\\!=\\!\\lambda$ 에서 $1/2\\lambda$ 로 포화')
+ax.legend(loc='upper right', fontsize=8.5)
+ax.grid(alpha=0.25)
+
+# (b) 실습 2 경로 추종: 스텝 크기
+ax = axes[1]
+ys = np.linspace(0.8, -0.8, 100)
+path = [np.array([1.5, y]) for y in ys]
+# 바깥은 경로 양 끝(연속 두 구간): |y| > y_cross = √(1.6²−1.5²) ≈ 0.557
+y_cross = np.sqrt((l1+l2)**2 - 1.5**2)
+ax.axvspan(0.8, y_cross, color='0.85', lw=0)
+ax.axvspan(-y_cross, -0.8, color='0.85', lw=0)
+ax.text(0.7, 200, '작업공간\n바깥', fontsize=8.5, color='dimgray', ha='center', va='top')
+
+msN = track_step('newton', 0.0, path)
+ax.semilogy(ys, msN, 'o-', color='tab:red', markersize=3, lw=1.3, label='Newton ($J^+$)')
+for lam, col in zip(lam_list, colors):
+    ms = track_step('dls', lam, path)
+    ax.semilogy(ys, ms, 's-', color=col, markersize=3, lw=1.6, label=f'DLS λ={lam}')
+ax.axvline(y_cross, color='k', ls=':', lw=1); ax.axvline(-y_cross, color='k', ls=':', lw=1)
+ax.set_xlim(0.85, -0.85)      # 경로 진행 방향(위→아래)에 맞춰 x 반전
+ax.set_xlabel('경로 위치  $y$  (목표 $x=1.5$ 고정)')
+ax.set_ylabel('스텝당 최대 ‖Δq‖  [rad] (log)')
+ax.set_title('(b) 실습 2 — 경계 두 번 통과: Newton은 폭발,\nλ가 스텝 상한을 통제 (큰 λ = 더 안전, 더 굼뜸)')
+ax.legend(loc='lower center', fontsize=8.5, ncol=2)
+fig.tight_layout()
+fig.savefig('fig4_dls_lambda_sweep.png', dpi=140)
 plt.close(fig)
 
 print('figures written')

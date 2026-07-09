@@ -1,7 +1,7 @@
-"""Lec R11 그림 생성: RNEA 2-pass 다이어그램 / 라그랑주 vs RNEA 일치 / O(n) 스케일링.
+"""Lec R11 그림 생성: RNEA 2-pass 다이어그램 / 라그랑주 vs RNEA 일치 / O(n) 스케일링 / WE-1 정적 역방향 pass.
 
 실행: python3 gen_figs.py  (이 디렉토리에서)
-출력: fig1_rnea_two_pass.png, fig2_lagrange_vs_rnea.png, fig3_scaling.png
+출력: fig1_rnea_two_pass.png, fig2_lagrange_vs_rnea.png, fig3_scaling.png, fig4_static_backward.png
 """
 import matplotlib
 matplotlib.use('Agg')
@@ -200,3 +200,113 @@ fig.tight_layout()
 fig.savefig('fig3_scaling.png', dpi=150, bbox_inches='tight')
 plt.close(fig)
 print('fig3 저장')
+
+# ================= fig4: WE-1 정적 역방향 pass 도해 (힘·토크 tip→base 누적) =================
+# 본문 WE-1: q=(0,0) 수평, q̇=q̈=0. 역방향 pass가 말단→기저로 관성력 f_i 와
+# 관절 토크 τ_i 를 누적하는 과정을, 실제 숫자(τ₂=5.886, τ₁=35.316)로 시각화한다.
+# 왼쪽: 팔 그림 위에 링크별 f_i(파랑 화살표)·중력(회색)과 τ_i 값.
+# 오른쪽: τ₁ = 19.62 + 5.886 + 9.81 의 "세 조각" 워터폴 분해 (본문 문장 그대로).
+l1w, l2w, m1w, m2w, gw = 1.0, 0.6, 2.0, 1.0, G_ACC
+
+# 정적 RNEA 를 그대로 호출해 숫자 확보(본문과 동일 함수/설정)
+tau_static = rnea_planar([0, 0], [0, 0], [0, 0], [l1w, l2w], [m1w, m2w], [l1w, l2w], [0, 0])
+# 폐형식 중력 항(검산): g1 = (m1+m2) g l1 + m2 g l2, g2 = m2 g l2  (q=0)
+g1_cf = (m1w + m2w) * gw * l1w + m2w * gw * l2w
+g2_cf = m2w * gw * l2w
+
+C_GRAV = '#7f7f7f'
+C_F = '#1f77b4'
+fig, (axL, axR) = plt.subplots(1, 2, figsize=(12.2, 5.0),
+                               gridspec_kw={'width_ratios': [1.35, 1]})
+
+# ---- 왼쪽: 수평 팔 + 관성력(=중력반작용) 누적 ----
+j0 = np.array([0.0, 0.0]); j1 = np.array([l1w, 0.0]); tip = np.array([l1w + l2w, 0.0])
+m1_pt = j1.copy(); m2_pt = tip.copy()          # 점질량 위치 (링크 끝)
+# 벽/기저
+axL.plot([-0.12, -0.12], [-0.5, 0.5], color=C_LINK, lw=4)
+for yv in np.linspace(-0.42, 0.42, 7):
+    axL.plot([-0.12, -0.22], [yv, yv + 0.09], color=C_LINK, lw=1.1)
+# 링크
+axL.plot([j0[0], j1[0]], [0, 0], color=C_LINK, lw=8, solid_capstyle='round', zorder=2)
+axL.plot([j1[0], tip[0]], [0, 0], color=C_LINK, lw=8, solid_capstyle='round', zorder=2)
+# 관절
+for p, name in [(j0, '관절1'), (j1, '관절2')]:
+    axL.plot(*p, 'o', ms=15, mfc='white', mec=C_JNT, mew=2, zorder=4)
+    axL.plot(*p, 'o', ms=5, color=C_JNT, zorder=5)
+# 점질량
+axL.plot(*m1_pt, 'o', ms=18, color='#d9a441', mec=C_JNT, mew=1.5, zorder=4)
+axL.plot(*m2_pt, 'o', ms=14, color='#d9a441', mec=C_JNT, mew=1.5, zorder=4)
+axL.text(m1_pt[0], 0.14, r'$m_1=2$', ha='center', fontsize=10)
+axL.text(m2_pt[0], 0.14, r'$m_2=1$', ha='center', fontsize=10)
+# 중력(각 질량이 받는 mg, 아래 방향) — 관성력 f 의 근원
+for p, mv, dy in [(m1_pt, m1w, -0.62), (m2_pt, m2w, -0.42)]:
+    axL.annotate('', xy=(p[0], dy), xytext=(p[0], 0),
+                 arrowprops=dict(arrowstyle='-|>', color=C_GRAV, lw=2.4))
+    axL.text(p[0] + 0.06, (dy) * 0.6, r'$m g=%.2f$' % (mv * gw), color=C_GRAV,
+             fontsize=9.5, va='center')
+# 역방향 화살표(말단→기저) + 누적 힘 f_i (관절이 감당)
+axL.annotate('', xy=(j1[0] + 0.04, 0.75), xytext=(tip[0] - 0.02, 0.75),
+             arrowprops=dict(arrowstyle='-|>', color=C_BWD, lw=2.6))
+axL.annotate('', xy=(j0[0] + 0.02, 0.98), xytext=(j1[0] + 0.02, 0.98),
+             arrowprops=dict(arrowstyle='-|>', color=C_BWD, lw=2.6))
+axL.text(0.5 * (j1[0] + tip[0]), 0.86, '역방향 pass', color=C_BWD, ha='center', fontsize=10)
+axL.text(0.5 * (j0[0] + j1[0]), 1.09, '(말단 → 기저)', color=C_BWD, ha='center', fontsize=10)
+# 각 관절이 받는 누적 힘 f_i (수직 위 방향, 관절이 지지)
+axL.annotate('', xy=(j1[0], 0.5), xytext=(j1[0], 0.0),
+             arrowprops=dict(arrowstyle='-|>', color=C_F, lw=2.4))
+axL.text(j1[0] + 0.05, 0.40, r'$f_2=%.2f$' % (m2w * gw), color=C_F, fontsize=10, va='center')
+axL.annotate('', xy=(j0[0], 0.58), xytext=(j0[0], 0.0),
+             arrowprops=dict(arrowstyle='-|>', color=C_F, lw=2.4))
+axL.text(j0[0] + 0.08, 0.52, r'$f_1=%.2f$' % ((m1w + m2w) * gw), color=C_F,
+         fontsize=10, va='center', ha='left')
+# 토크 값 배지
+axL.text(j1[0], -0.95, r'$\tau_2=%.3f$' % tau_static[1], ha='center', fontsize=11.5,
+         color=C_BWD, bbox=dict(boxstyle='round,pad=0.3', fc='#fde8e8', ec=C_BWD))
+axL.text(j0[0], -1.18, r'$\tau_1=%.3f$' % tau_static[0], ha='center', fontsize=11.5,
+         color=C_BWD, bbox=dict(boxstyle='round,pad=0.3', fc='#fde8e8', ec=C_BWD))
+axL.set_title('WE-1 정적 역방향 pass: $q=(0,0)$, $\\dot q=\\ddot q=0$\n'
+              '관성력 $f_i$ 와 관절 토크 $\\tau_i$ 를 말단→기저로 누적', fontsize=11.5)
+axL.set_xlim(-0.35, 1.85); axL.set_ylim(-1.4, 1.25)
+axL.set_aspect('equal'); axL.axis('off')
+
+# ---- 오른쪽: τ₁ 워터폴 (본문의 "세 조각") ----
+# τ1 = l1·m1·g (자기 질량 팔길이) + n2 (자식 모멘트) + l1·(m2 g) (자식 힘 팔길이)
+piece_self = l1w * m1w * gw          # 19.62
+piece_n2 = tau_static[1]             # 5.886  (자식 모멘트)
+piece_fchild = l1w * (m2w * gw)      # 9.81
+labels = ['자기 질량\n$l_1 m_1 g$', '자식 모멘트\n$n_2=\\tau_2$',
+          '자식 힘 팔길이\n$l_1\\,(m_2 g)$', '$\\tau_1$ 합']
+vals = [piece_self, piece_n2, piece_fchild]
+starts = [0, piece_self, piece_self + piece_n2]
+colors = ['#d9a441', C_BWD, C_F]
+xpos = np.arange(4)
+for k in range(3):
+    axR.bar(xpos[k], vals[k], bottom=starts[k], width=0.62, color=colors[k],
+            edgecolor=C_JNT, lw=0.8)
+    axR.text(xpos[k], starts[k] + vals[k] + 0.6, r'$+%.3f$' % vals[k],
+             ha='center', fontsize=10, color=C_JNT)
+    if k < 3:
+        yconn = starts[k] + vals[k]
+        axR.plot([xpos[k] + 0.31, xpos[k + 1] - 0.31], [yconn, yconn],
+                 color=C_JNT, lw=0.9, ls='--', alpha=0.6)
+axR.bar(xpos[3], tau_static[0], width=0.62, color='#c0392b', edgecolor=C_JNT, lw=0.9)
+axR.text(xpos[3], tau_static[0] + 0.6, r'$%.3f$' % tau_static[0], ha='center',
+         fontsize=11, color='#c0392b', fontweight='bold')
+axR.set_xticks(xpos); axR.set_xticklabels(labels, fontsize=9.5)
+axR.set_ylabel('토크 [N·m]')
+axR.set_title('링크1 토크의 세 조각 (본문 WE-1)\n'
+              '$\\tau_1 = %.2f + %.3f + %.2f = %.3f$' %
+              (piece_self, piece_n2, piece_fchild, tau_static[0]), fontsize=11)
+axR.set_ylim(0, tau_static[0] * 1.18)
+axR.grid(axis='y', alpha=0.3)
+# 폐형식 검산 주석
+axR.text(0.5, 0.06, '폐형식 중력항 검산:  $g_1=(m_1{+}m_2)g\\,l_1 + m_2 g\\,l_2 = %.3f$  ✓'
+         % g1_cf, transform=axR.transAxes, ha='center', fontsize=9.5,
+         color='#2ca02c', bbox=dict(boxstyle='round,pad=0.3', fc='#eafaea', ec='#2ca02c'))
+
+fig.suptitle('역방향 pass = 중력보상 토크: 자식이 넘긴 힘·모멘트가 부모의 토크로 누적된다',
+             fontsize=13, y=1.01)
+fig.tight_layout()
+fig.savefig('fig4_static_backward.png', dpi=150, bbox_inches='tight')
+plt.close(fig)
+print('fig4 저장, τ_static =', tau_static, ' g1_cf =', g1_cf, ' g2_cf =', g2_cf)

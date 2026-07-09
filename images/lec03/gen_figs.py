@@ -107,4 +107,144 @@ a2.set_ylim(1, 6000); a2.grid(alpha=0.3, axis='y')
 plt.tight_layout()
 plt.savefig(os.path.join(OUT, 'fig2_bug_amplification.png'), dpi=140)
 plt.close()
+
+# ---------------- Fig 3: 나사(screw) 운동 — WE-3 시각화 ----------------
+# 축 w=(0,0,1)이 점 q=(1,0,0)을 지난다. 순수 회전(피치 0)이므로 v=-w×q.
+# 축이 원점을 지나지 않으므로 원점의 상은 (1,-1,0)이 된다 (WE-3 손계산).
+fig, (a1, a2) = plt.subplots(1, 2, figsize=(11, 4.6))
+
+w = np.array([0, 0, 1.0]); q = np.array([1.0, 0, 0])
+
+# (a) 위에서 본 회전 나사 운동 (xy 평면 투영): 원점이 축 둘레로 90° 돈다
+th_full = np.linspace(0, np.pi/2, 60)
+# 축(q)을 중심으로 반지름 1인 원 위에서 원점 (0,0)이 (1,-1)로 이동
+# 원점의 위치벡터(축 기준) = (0,0)-(1,0) = (-1,0), 각 th만큼 +회전
+pts = np.array([[np.cos(t)*(-1) - np.sin(t)*0 + q[0],
+                 np.sin(t)*(-1) + np.cos(t)*0 + q[1]] for t in th_full])
+a1.plot(pts[:, 0], pts[:, 1], color='#ff7f0e', lw=2.4, zorder=3)
+a1.plot(q[0], q[1], marker='x', ms=13, mew=3, color='#d62728', zorder=5)
+a1.annotate('나사 축\n$q=(1,0,0)$, $\\omega=+z$ (지면 밖)', xy=(1, 0), xytext=(1.15, 0.55),
+            fontsize=9.5, color='#d62728',
+            arrowprops=dict(arrowstyle='->', color='#d62728'))
+for label, P, dxy in [('원점 $(0,0,0)$', np.array([0, 0]), (-0.55, 0.10)),
+                      ("상 $(1,-1,0)$", np.array([1, -1]), (0.10, -0.05))]:
+    a1.plot(P[0], P[1], 'o', ms=9, color='#1f77b4', zorder=5)
+    a1.annotate(label, xy=P, xytext=(P[0]+dxy[0], P[1]+dxy[1]), fontsize=10,
+                color='#1f77b4')
+# 반지름(지렛대) 점선 두 개
+a1.plot([q[0], 0], [q[1], 0], ls='--', color='gray', lw=1.3)
+a1.plot([q[0], 1], [q[1], -1], ls='--', color='gray', lw=1.3)
+a1.annotate('+90°', xy=(0.62, -0.30), fontsize=12, color='#ff7f0e', weight='bold')
+a1.set_xlim(-0.9, 2.0); a1.set_ylim(-1.5, 1.1); a1.set_aspect('equal')
+a1.grid(alpha=0.3)
+a1.set_xlabel('x'); a1.set_ylabel('y')
+a1.set_title('(a) 나사 운동(위에서 봄): 원점이 축 둘레로 90° 회전\n'
+             r'축이 원점 밖이라 회전인데도 병진 $p=(1,-1,0)$이 생긴다')
+
+# (b) 지수좌표가 실제로 SE(3)를 만든다: expm으로 검증한 좌표계 이동
+from scipy.linalg import expm
+S = np.zeros((4, 4))
+S[:3, :3] = np.array([[0, -w[2], w[1]], [w[2], 0, -w[0]], [-w[1], w[0], 0]])
+S[:3, 3] = -np.cross(w, q)                 # v = -w×q = (0,-1,0)
+
+def frame2d(ax, T, name, scale=0.35, off=(0.05, 0.05)):
+    o = T[:3, 3]
+    ax.quiver(o[0], o[1], T[0, 0]*scale, T[1, 0]*scale, color='#d62728',
+              angles='xy', scale_units='xy', scale=1, width=0.012, zorder=4)
+    ax.quiver(o[0], o[1], T[0, 1]*scale, T[1, 1]*scale, color='#2ca02c',
+              angles='xy', scale_units='xy', scale=1, width=0.012, zorder=4)
+    ax.plot(o[0], o[1], 'ko', ms=5, zorder=5)
+    ax.text(o[0]+off[0], o[1]+off[1], name, fontsize=10, weight='bold')
+
+thetas = np.linspace(0, np.pi/2, 5)
+orig_path = []
+for i, t in enumerate(thetas):
+    T = expm(S * t)
+    orig_path.append(T[:3, 3])
+    alpha = 0.35 + 0.65 * i / (len(thetas) - 1)
+    o = T[:3, 3]
+    a2.quiver(o[0], o[1], T[0, 0]*0.28, T[1, 0]*0.28, color='#d62728',
+              angles='xy', scale_units='xy', scale=1, width=0.010, alpha=alpha, zorder=4)
+    a2.quiver(o[0], o[1], T[0, 1]*0.28, T[1, 1]*0.28, color='#2ca02c',
+              angles='xy', scale_units='xy', scale=1, width=0.010, alpha=alpha, zorder=4)
+orig_path = np.array(orig_path)
+a2.plot(orig_path[:, 0], orig_path[:, 1], ls='--', color='#ff7f0e', lw=1.8, zorder=2)
+a2.plot(q[0], q[1], marker='x', ms=12, mew=3, color='#555', zorder=5)
+a2.text(q[0]+0.04, q[1]+0.06, '축 $q$', fontsize=9.5, color='#555')
+a2.text(0.02, 0.10, r'$\theta=0$', fontsize=9)
+a2.text(1.02, -1.02, r'$\theta=90°$', fontsize=9)
+a2.annotate(r'$T=e^{[\mathcal{S}]\theta}$,   $\mathcal{S}=(\omega,\,v)$,   $v=-\omega\times q$',
+            xy=(0.5, 0.55), fontsize=11)
+a2.set_xlim(-0.6, 1.8); a2.set_ylim(-1.5, 0.9); a2.set_aspect('equal')
+a2.grid(alpha=0.3)
+a2.set_xlabel('x'); a2.set_ylabel('y')
+a2.set_title('(b) $e^{[\\mathcal{S}]\\theta}$가 회전+병진을 한꺼번에 생성\n'
+             '(x=빨강, y=초록 축이 함께 돌며 원점이 나선 경로를 그린다)')
+
+plt.tight_layout()
+plt.savefig(os.path.join(OUT, 'fig3_screw_motion.png'), dpi=140)
+plt.close()
+
+# ---------------- Fig 4: DH 규약 vs URDF 프레임 배치 ----------------
+# 같은 2-링크 팔의 관절 프레임을, DH 규약(z=관절축, x=공통수선)과
+# URDF(임의/CAD 원점) 두 방식으로 어떻게 배치하는지 대조 (§5 표의 시각화).
+fig, (a1, a2) = plt.subplots(1, 2, figsize=(11, 4.8))
+
+def draw_frame2d(ax, o, R2, name, scale=0.55, lw=2.6, off=(0.05, 0.10),
+                 col=('#d62728', '#2ca02c')):
+    ax.quiver(o[0], o[1], R2[0, 0]*scale, R2[1, 0]*scale, color=col[0],
+              angles='xy', scale_units='xy', scale=1, width=0.011, zorder=5)
+    ax.quiver(o[0], o[1], R2[0, 1]*scale, R2[1, 1]*scale, color=col[1],
+              angles='xy', scale_units='xy', scale=1, width=0.011, zorder=5)
+    ax.plot(o[0], o[1], 'ko', ms=5, zorder=6)
+    ax.text(o[0]+off[0], o[1]+off[1], name, fontsize=10.5, weight='bold', zorder=6)
+
+# 공통 링크 형상 (2-링크 평면 팔): base(0,0) → 관절1 → 관절2 → EEF
+J0 = np.array([0.0, 0.0]); J1 = np.array([1.6, 0.0]); EE = np.array([2.8, 0.9])
+I2 = np.eye(2)
+Rlink = np.array([[np.cos(0.6435), -np.sin(0.6435)],
+                  [np.sin(0.6435),  np.cos(0.6435)]])   # 두 번째 링크 기울기
+
+for ax in (a1, a2):
+    ax.plot([J0[0], J1[0]], [J0[1], J1[1]], color='#888', lw=7, alpha=0.5, zorder=1)
+    ax.plot([J1[0], EE[0]], [J1[1], EE[1]], color='#888', lw=7, alpha=0.5, zorder=1)
+    ax.plot(J1[0], J1[1], 'o', ms=15, mfc='white', mec='#333', mew=2, zorder=3)
+    ax.set_xlim(-0.8, 3.7); ax.set_ylim(-1.2, 1.9); ax.set_aspect('equal')
+    ax.grid(alpha=0.25)
+
+# (a) DH: 프레임이 규약에 강제됨 — 원점이 물리 관절과 어긋날 수 있고,
+#     x축은 공통수선(다음 관절축 방향), z축(=관절축)은 지면 밖.
+draw_frame2d(a1, J0, I2, r'{0}  (z=관절축, 지면 밖)', off=(-0.15, 0.30))
+draw_frame2d(a1, J1, I2, r'{1}', off=(0.05, 0.30))
+# DH 프레임 {1}의 원점을 규약이 링크1 끝(공통수선 교점)에 두는 모습 강조
+draw_frame2d(a1, EE, Rlink, r'{2}', off=(0.10, 0.15))
+a1.annotate('x축 = 공통수선\n(다음 관절축 향함)', xy=(0.8, 0.0), xytext=(0.15, -0.95),
+            fontsize=9, color='#d62728',
+            arrowprops=dict(arrowstyle='->', color='#d62728'))
+a1.annotate(r'파라미터 4개: $\theta,d,a,\alpha$', xy=(2.0, 1.55), fontsize=10,
+            color='#1f77b4')
+a1.set_title('(a) DH 규약: 프레임 배치가 규약에 강제\n'
+             'z=관절축, x=공통수선. 최소 4파라미터·변종 둘(std/modified)')
+
+# (b) URDF: 프레임이 임의 (CAD 원점 그대로). origin=xyz+rpy 6개.
+Rcad = np.array([[np.cos(-0.35), -np.sin(-0.35)],
+                 [np.sin(-0.35),  np.cos(-0.35)]])
+draw_frame2d(a2, J0, I2, 'base_link', off=(-0.15, 0.28),
+             col=('#d62728', '#2ca02c'))
+# 링크1 프레임을 링크 중간의 임의 CAD 원점에 (URDF는 자유)
+mid1 = (J0 + J1) / 2 + np.array([0, 0.0])
+draw_frame2d(a2, mid1, Rcad, 'link1', off=(0.0, 0.30))
+draw_frame2d(a2, EE, Rlink, 'link2', off=(0.10, 0.15))
+a2.annotate('원점을 CAD 어디든\n둘 수 있다', xy=(mid1[0], mid1[1]),
+            xytext=(0.15, -0.95), fontsize=9, color='#d62728',
+            arrowprops=dict(arrowstyle='->', color='#d62728'))
+a2.annotate('<origin xyz rpy> = 6개\n+ <axis> 3개', xy=(1.9, 1.5), fontsize=10,
+            color='#1f77b4')
+a2.set_title('(b) URDF/MJCF: 프레임 임의(CAD 원점)\n'
+             'origin(6) + axis(3). 규약 암기 불필요·파일은 장황')
+
+plt.tight_layout()
+plt.savefig(os.path.join(OUT, 'fig4_dh_vs_urdf.png'), dpi=140)
+plt.close()
+
 print('saved figs to', OUT)

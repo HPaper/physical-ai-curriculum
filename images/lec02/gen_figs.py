@@ -158,4 +158,149 @@ plt.tight_layout()
 plt.savefig('fig3_slerp_vs_lerp.png', dpi=140, bbox_inches='tight')
 plt.close()
 
+# ---------------------------------------------------------------- fig 4
+# 회전 표현 4종의 관계도: 파라미터 개수(9→4→3)·제약·특이점을 한 눈에
+# 본문 §1 표 "하나의 회전, 네 벌의 옷"과 §5 지도의 시각적 요약.
+fig = plt.figure(figsize=(11, 5.0))
+
+# (a) 파라미터 개수 vs 특이점 여부 — 트레이드오프의 뼈대
+ax = fig.add_subplot(1, 2, 1)
+# (숫자 개수, 제약 개수, 이름, 색, 특이점 여부)
+reps = [('회전행렬 R', 9, 6, C_BLUE,  False),
+        ('단위 쿼터니언 q', 4, 1, C_GREEN, False),
+        ('축-각 ωθ (rotvec)', 3, 0, '#9467bd', True),
+        ('오일러각 (α,β,γ)', 3, 0, C_RED,  True)]
+ypos = np.arange(len(reps))[::-1]
+for y, (name, n, c_con, col, sing) in zip(ypos, reps):
+    dof = n - c_con
+    ax.barh(y, n, color=col, alpha=0.28, height=0.55, zorder=2)
+    ax.barh(y, dof, color=col, alpha=0.95, height=0.55, zorder=3,
+            label=None)
+    ax.text(-0.25, y, name, ha='right', va='center', fontsize=10)
+    tag = '특이점 있음' if sing else '특이점 없음'
+    ax.text(n + 0.2, y, f'{n}개 (제약 {c_con} → 자유도 {dof})\n{tag}',
+            ha='left', va='center', fontsize=8,
+            color=(C_RED if sing else C_GRAY))
+ax.axvline(3, color='k', lw=0.8, ls=':', zorder=1)
+ax.text(3, len(reps) - 0.35, '자유도 3\n(SO(3)의 차원)', ha='center',
+        va='bottom', fontsize=8, color='k')
+ax.set_xlim(-3.4, 12.5); ax.set_ylim(-0.6, len(reps) - 0.1)
+ax.set_yticks([]); ax.set_xlabel('저장하는 숫자 개수 →')
+ax.set_title('(a) 여분의 숫자 = "특이점 없음"의 값\n'
+             '진한 막대 = 자유도 3, 옅은 막대 = 여분(제약)', fontsize=9)
+ax.spines[['top', 'right', 'left']].set_visible(False)
+ax.grid(axis='x', alpha=0.3)
+
+# (b) 변환 관계도 — 어느 표현이 허브인지, 어디서 깨지는지
+ax = fig.add_subplot(1, 2, 2)
+ax.set_xlim(0, 10); ax.set_ylim(0, 10); ax.set_axis_off()
+nodes = {
+    'R':  (5.0, 8.2, '회전행렬 R\n(9, 제약 6)',        C_BLUE),
+    'q':  (5.0, 4.6, '단위 쿼터니언 q\n(4, ‖q‖=1)',    C_GREEN),
+    'ax': (1.6, 6.4, '축-각 ωθ\n(3, rotvec)',          '#9467bd'),
+    'eu': (8.4, 6.4, '오일러각\n(3, ZYX)',            C_RED),
+}
+for key, (x, y, lab, col) in nodes.items():
+    ax.add_patch(plt.Rectangle((x-1.35, y-0.62), 2.7, 1.24, fc=col,
+                               ec='k', lw=1.0, alpha=0.85, zorder=3))
+    ax.text(x, y, lab, ha='center', va='center', fontsize=8.5,
+            color='white', zorder=4, fontweight='bold')
+
+
+def arrow(a, b, txt, col, rad=0.0, dy=0.0, dx=0.0):
+    xa, ya = nodes[a][0], nodes[a][1]
+    xb, yb = nodes[b][0], nodes[b][1]
+    ax.annotate('', xy=(xb, yb), xytext=(xa, ya),
+                arrowprops=dict(arrowstyle='-|>', color=col, lw=1.6,
+                                shrinkA=26, shrinkB=26,
+                                connectionstyle=f'arc3,rad={rad}'), zorder=2)
+    mx, my = (xa + xb) / 2 + dx, (ya + yb) / 2 + dy
+    ax.text(mx, my, txt, ha='center', va='center', fontsize=7.3, color=col,
+            bbox=dict(boxstyle='round,pad=0.15', fc='white', ec='none',
+                      alpha=0.85), zorder=5)
+
+
+arrow('ax', 'R', 'Rodrigues (E2)', '#9467bd', rad=0.18, dx=-0.55, dy=0.45)
+arrow('R', 'ax', 'log — θ=0,π 특이', C_GRAY, rad=0.18, dx=0.55, dy=-0.55)
+arrow('ax', 'q', 'q=(cos θ/2, ω sin θ/2)', '#9467bd', rad=-0.15, dx=-0.2)
+arrow('q', 'R', '닫힌 공식 (양방향)', C_GREEN, rad=0.0, dx=1.65)
+arrow('eu', 'R', 'Rz·Ry·Rx', C_RED, rad=-0.18, dx=0.55, dy=0.45)
+arrow('R', 'eu', 'atan2 — β=±90° 특이', C_RED, rad=-0.18, dx=-0.55, dy=-0.55)
+ax.text(5.0, 1.7, '허브 = R 또는 q (특이점 없음)\n'
+        '오일러각·축-각은 입출력·미소회전에서만',
+        ha='center', va='center', fontsize=8, style='italic',
+        color='k', bbox=dict(boxstyle='round,pad=0.4', fc='#fff7e6',
+                             ec=C_GRAY, lw=0.8))
+ax.set_title('(b) 표현 사이의 변환과 특이점\n'
+             '붉은 화살표 = 특이점을 지나는 변환', fontsize=9)
+plt.tight_layout()
+plt.savefig('fig4_representations_map.png', dpi=140, bbox_inches='tight')
+plt.close()
+
+# ---------------------------------------------------------------- fig 5
+# 회전 합성의 비가환성: (x축 90° → z축 90°) ≠ (z축 90° → x축 90°)
+# E3의 "q1⊗q2 ≠ q2⊗q1 (외적 항)" — 회전이 벡터공간이 아닌 또 하나의 증거.
+def draw_frame(ax, R, origin=(0, 0, 0), scale=1.0, alpha=1.0, lw=2.4,
+               labels=False):
+    o = np.asarray(origin, float)
+    cols = [C_RED, C_GREEN, C_BLUE]
+    names = ['x', 'y', 'z']
+    for i in range(3):
+        v = R[:, i] * scale
+        ax.quiver(*o, *v, color=cols[i], lw=lw, arrow_length_ratio=0.16,
+                  alpha=alpha)
+        if labels:
+            ax.text(*(o + v * 1.18), names[i], color=cols[i], fontsize=9)
+
+
+def draw_book(ax, R, origin=(0, 0, 0), alpha=0.5):
+    # 얇은 직육면체(책): 축 순서를 눈으로 읽게 해 주는 강체
+    o = np.asarray(origin, float)
+    lx, ly, lz = 0.9, 0.65, 0.12
+    verts = np.array([[x, y, z] for x in (0, lx) for y in (0, ly)
+                      for z in (0, lz)])
+    verts = (R @ (verts - np.array([lx/2, ly/2, lz/2])).T).T + o
+    faces = [[0, 1, 3, 2], [4, 5, 7, 6], [0, 1, 5, 4],
+             [2, 3, 7, 6], [0, 2, 6, 4], [1, 3, 7, 5]]
+    from mpl_toolkits.mplot3d.art3d import Poly3DCollection
+    poly = Poly3DCollection([verts[f] for f in faces], alpha=alpha,
+                            facecolor='#f0c060', edgecolor='k', linewidths=0.7)
+    ax.add_collection3d(poly)
+
+
+Rx90, Rz90 = Rx(deg(90)), Rz(deg(90))
+# 순서 A: 먼저 x축 90°, 그다음 (월드축 기준) z축 90°  →  R = Rz90 @ Rx90
+# 순서 B: 먼저 z축 90°, 그다음 x축 90°               →  R = Rx90 @ Rz90
+RA = Rz90 @ Rx90
+RB = Rx90 @ Rz90
+diff = np.rad2deg(np.linalg.norm(Rot.from_matrix(RA.T @ RB).as_rotvec()))
+
+fig = plt.figure(figsize=(12, 4.4))
+seqs = [
+    ('순서 A:  x축 90°  →  z축 90°', [np.eye(3), Rx90, RA], 1),
+    ('순서 B:  z축 90°  →  x축 90°', [np.eye(3), Rz90, RB], 2),
+]
+for row, (title, frames, col0) in enumerate(seqs):
+    for k, R in enumerate(frames):
+        ax = fig.add_subplot(2, 3, row*3 + k + 1, projection='3d')
+        draw_frame(ax, np.eye(3), scale=0.55, alpha=0.18, lw=1.0)  # 월드축(옅게)
+        draw_book(ax, R)
+        draw_frame(ax, R, scale=1.0, labels=True)
+        ax.set_xlim(-1, 1); ax.set_ylim(-1, 1); ax.set_zlim(-1, 1)
+        ax.set_box_aspect([1, 1, 1]); ax.set_axis_off()
+        step = ['시작 (I)', ['x축 90° 후', 'z축 90° 후'][row],
+                ['+ z축 90° 후', '+ x축 90° 후'][row]][k]
+        ax.set_title(step, fontsize=9)
+        ax.view_init(elev=22, azim=-60)
+    # 행 제목: 첫 서브플롯 왼쪽에
+    fig.text(0.008, 0.75 - row*0.47, title, fontsize=10, rotation=90,
+             va='center', ha='center', fontweight='bold',
+             color=(C_BLUE if row == 0 else C_GREEN))
+
+fig.suptitle('회전 합성은 비가환: 같은 두 회전을 순서만 바꾸면 최종 자세가 다르다  '
+             f'(A와 B의 자세 차 = {diff:.0f}°)', fontsize=11, y=1.02)
+plt.tight_layout(rect=[0.02, 0, 1, 0.99])
+plt.savefig('fig5_noncommutative.png', dpi=140, bbox_inches='tight')
+plt.close()
+
 print("figures written")

@@ -191,8 +191,91 @@ fig.tight_layout()
 fig.savefig(f"{OUT}/fig3_stitching.png", dpi=150, bbox_inches='tight')
 plt.close(fig)
 
-print("saved: fig1_chunk_to_setpoints.png, fig2_profiles.png, fig3_stitching.png")
+# =====================================================================
+# fig4 — 사다리꼴(속도 프로파일) vs 5차 다항, 그리고 저크 제한의 대가 a/j
+#   (a) 속도 프로파일 겹쳐보기: 사다리꼴은 한계에 "붙고", 다항은 순간만 닿는다
+#   (b) 도달 시간의 분해: T = L/v + v/a (+ a/j) — 각 한계가 한 항씩 청구
+#   (c) 저크 한계 j를 쓸어가며: 총 시간은 a/j만큼 늘고, 피크 저크는 반비례로 준다
+# 공통 제약: fig2와 동일 (L=0.8, v=2, a=8, j=80)
+# =====================================================================
+# --- (a)용: fig2에서 만든 사다리꼴(t1,v1)·5차(t3,v3) 재사용 ---
+fig, ax = plt.subplots(1, 3, figsize=(14, 4.0))
+
+# (a) 속도 프로파일 겹쳐보기 — 같은 면적(L=0.8), 다른 모양
+ax[0].plot(t1, v1, color='tab:red', lw=2.0, label=f'사다리꼴 (T={T_trap:.2f}s)')
+ax[0].plot(t3, v3, color='tab:blue', lw=2.0, label=f'5차 다항 (T={T_q:.2f}s)')
+ax[0].fill_between(t1, v1, color='tab:red', alpha=0.10)
+ax[0].axhline(vm, color='gray', ls=':', lw=1.2)
+ax[0].text(0.02, vm+0.03, 'v_max = 2', color='gray', fontsize=8)
+# 사다리꼴이 v_max에 붙어있는 순항 구간 표시
+ax[0].annotate('순항: 한계에 붙음', xy=(ta+tc/2, vm), xytext=(ta+tc/2, vm-0.9),
+               fontsize=8.5, color='tab:red', ha='center',
+               arrowprops=dict(arrowstyle='->', color='tab:red', lw=1.2))
+ax[0].annotate('다항: 순간만 닿음', xy=(T_q/2, v3.max()), xytext=(T_q/2, v3.max()+0.28),
+               fontsize=8.5, color='tab:blue', ha='center',
+               arrowprops=dict(arrowstyle='->', color='tab:blue', lw=1.2))
+ax[0].set_xlabel('시간 [s]'); ax[0].set_ylabel('속도 [rad/s]')
+ax[0].set_title('(a) 같은 면적(L=0.8), 다른 모양\n사다리꼴은 시간 최적')
+ax[0].legend(fontsize=8.5, loc='upper right'); ax[0].grid(alpha=0.3)
+ax[0].set_ylim(0, 2.55)
+
+# (b) 도달 시간의 분해 — 누적 막대: L/v (순항) + v/a (가속) [+ a/j (저크)]
+Lv, va, aj = L/vm, vm/am, am/jm
+bars = ['사다리꼴', 'S-커브']
+seg_Lv  = [Lv, Lv]
+seg_va  = [va, va]
+seg_aj  = [0.0, aj]
+x = np.arange(2)
+ax[1].bar(x, seg_Lv, 0.55, color='tab:gray',   label='L/v  (속도 한계)')
+ax[1].bar(x, seg_va, 0.55, bottom=seg_Lv, color='tab:orange', label='v/a  (가속 한계)')
+ax[1].bar(x, seg_aj, 0.55, bottom=np.array(seg_Lv)+np.array(seg_va),
+          color='tab:green', label='a/j  (저크 한계)')
+for i in range(2):
+    tot = seg_Lv[i]+seg_va[i]+seg_aj[i]
+    ax[1].text(i, tot+0.012, f'T={tot:.2f}s', ha='center', fontsize=9.5, fontweight='bold')
+ax[1].text(0, Lv/2, '0.40', ha='center', va='center', fontsize=8, color='white')
+ax[1].text(0, Lv+va/2, '0.25', ha='center', va='center', fontsize=8, color='white')
+ax[1].text(1, Lv+va+aj/2, '0.10', ha='center', va='center', fontsize=8, color='white')
+ax[1].set_xticks(x); ax[1].set_xticklabels(bars)
+ax[1].set_ylabel('도달 시간 [s]')
+ax[1].set_title('(b) 각 한계가 한 항씩 청구\nT = L/v + v/a (+ a/j)')
+ax[1].legend(fontsize=8, loc='upper left'); ax[1].grid(alpha=0.3, axis='y')
+ax[1].set_ylim(0, 0.9)
+
+# (c) 저크 한계 j 스윕 — 총 시간은 a/j만큼 늘고, 피크 저크는 반비례로 준다
+#     (순항 존재 조건 v>=a^2/j, 즉 j>=a^2/v=32 범위에서)
+j_sweep = np.linspace(32, 400, 200)
+T_scurve = Lv + va + am/j_sweep           # = 0.65 + a/j
+peak_jerk = j_sweep                        # S-커브 피크 저크 = j (설정값)
+axc = ax[2]
+l1, = axc.plot(j_sweep, T_scurve, color='tab:green', lw=2.0, label='총 시간 T = 0.65 + a/j')
+axc.axhline(T_trap, color='tab:red', ls='--', lw=1.4, label=f'사다리꼴 하한 {T_trap:.2f}s')
+axc.set_xlabel('저크 한계 j [rad/s³]'); axc.set_ylabel('총 시간 [s]', color='tab:green')
+axc.tick_params(axis='y', labelcolor='tab:green')
+axc.set_title('(c) 저크 제한의 대가\n느슨할수록(j↑) 사다리꼴에 수렴')
+axc.grid(alpha=0.3)
+# 우측 축: 피크 저크
+axr = axc.twinx()
+l2, = axr.plot(j_sweep, peak_jerk, color='tab:purple', lw=1.6, ls='-.', label='피크 저크 = j')
+axr.set_ylabel('피크 저크 [rad/s³]', color='tab:purple')
+axr.tick_params(axis='y', labelcolor='tab:purple')
+# WE-2 동작점 j=80 표시
+axc.axvline(jm, color='gray', ls=':', lw=1.2)
+axc.plot(jm, Lv+va+am/jm, 'o', color='tab:green', ms=7, zorder=5)
+axc.annotate(f'WE-2: j=80\nT=0.75s', xy=(jm, Lv+va+am/jm),
+             xytext=(150, 0.80), fontsize=8.5, color='k',
+             arrowprops=dict(arrowstyle='->', color='k', lw=1.0))
+axc.legend(handles=[l1, l2, axc.lines[1]], fontsize=8, loc='upper right')
+
+fig.suptitle('사다리꼴(속도 프로파일) vs 다항, 그리고 저크 제한이 청구하는 시간 a/j', y=1.03)
+fig.tight_layout()
+fig.savefig(f"{OUT}/fig4_profile_vs_poly.png", dpi=150, bbox_inches='tight')
+plt.close(fig)
+
+print("saved: fig1_chunk_to_setpoints.png, fig2_profiles.png, fig3_stitching.png, fig4_profile_vs_poly.png")
 print(f"[fig2] T_trap={T_trap:.4f}, T_s={T_s:.4f}, T_quintic={T_q:.4f}")
 print(f"[fig2] 적분 검증: 사다리꼴 끝위치={q1[-1]:.4f}, S-커브 끝위치={q2[-1]:.4f} (목표 0.8)")
 print(f"[fig3] 순진 교체: 위치 점프={qn[np.searchsorted(tt,t_sw)]-qn[np.searchsorted(tt,t_sw)-1]:+.4f} rad, "
       f"속도 {v_old(t_sw):.3f}→{0.0:.3f}")
+print(f"[fig4] 분해: L/v={L/vm:.3f}, v/a={vm/am:.3f}, a/j={am/jm:.3f}  "
+      f"→ 사다리꼴 {L/vm+vm/am:.3f}s, S-커브 {L/vm+vm/am+am/jm:.3f}s")

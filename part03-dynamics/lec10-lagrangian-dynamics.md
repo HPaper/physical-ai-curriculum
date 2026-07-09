@@ -118,6 +118,12 @@ $$
 = \dot q^\top \tau + \frac{1}{2}\dot q^\top (\dot M - 2C)\dot q = \dot q^\top \tau
 $$
 
+이 항등식은 τ가 무엇이든(0이든, 댐핑이든, 제어기든) 성립한다 — C의 선택에 의존하지도 않는다(토론 질문 2). 세 가지 입력에서 이것을 직접 확인해 보면:
+
+![수동성: 에너지 변화가 입력 일률의 적분과 일치](../images/lec10/fig4_passivity.png)
+
+*그림 4: E3의 수동성 항등식 $\dot E = \dot q^\top \tau$의 수치 검증(중력 포함). (a) 세 시나리오의 로봇 에너지 변화 $E(t)-E(0)$(굵은 실선)와 입력 일률의 시간적분 $\int \dot q^\top\tau\,dt$(흰 점선)가 정확히 겹친다 — τ=0이면 보존(수평선), 관절 댐핑 $\tau=-b\dot q$이면 $\dot q^\top\tau=-b\|\dot q\|^2\le 0$이라 단조 소산, PD $\tau=-K_p(q-q_d)-K_d\dot q$(실습 4-②)이면 제어기가 에너지를 넣었다 뺐다 하지만 항등식은 그대로 성립한다. (b) 순간 항등식의 잔차 $dE/dt - \dot q^\top\tau$는 $10^{-13}$ 규모 — 유한차분이 아니라 구조식 $\dot E = \dot q^\top M\ddot q + \frac12\dot q^\top\dot M\dot q + \dot q^\top g$로 계산해 부동소수점 오차까지 0임을 보인다. gen_figs.py로 생성.*
+
 $M \succ 0$은 운동에너지가 항상 양수라는 물리적 사실의 번역이고(0이 되려면 모든 링크가 동시에 정지), 덕분에 $M^{-1}$이 항상 존재해 순동역학 $\ddot q = M^{-1}(\tau - C\dot q - g)$을 언제나 풀 수 있다.
 
 ### 3. Worked Example — 2링크 암 완전 유도

@@ -123,4 +123,80 @@ fig.tight_layout()
 fig.savefig('fig3_gimbal.png', dpi=140, bbox_inches='tight')
 plt.close(fig)
 
-print('생성 완료: fig1_velocity_ellipse.png, fig2_force_duality.png, fig3_gimbal.png')
+# ---------------------------------------------------------------- fig 4
+# 힘의 쌍대 J^T F 도해: 끝점 힘 -> 관절토크 (모멘트팔 시각화, WE-2)
+# 같은 하중 F=(0, mg)을 두 자세에 걸어, tau_2=0 (링크2 수직) vs tau_2≠0 을 대비.
+m, g = 1.0, 9.81
+F_tip = np.array([0.0, m*g])          # EEF가 추를 떠받치는 위쪽 힘
+
+def torque(q):
+    return jac(q).T @ F_tip           # tau = J^T F
+
+cases = [(np.deg2rad([30.0, 60.0]), '자세 ①: q=(30°, 60°) — 링크2 수직'),
+         (np.deg2rad([30.0, 30.0]), '자세 ②: q=(30°, 30°) — 링크2 기울어짐')]
+
+fig, axes = plt.subplots(2, 2, figsize=(11.5, 8.4),
+                         gridspec_kw={'height_ratios': [1, 1], 'width_ratios': [1.55, 1]})
+
+for row, (q, ttl) in enumerate(cases):
+    axG = axes[row, 0]                # 왼쪽: 팔 + 힘 + 모멘트팔
+    axB = axes[row, 1]                # 오른쪽: 관절토크 막대
+    pts = fk_pts(q)                   # base, elbow, ee
+    p_base, p_elbow, p_ee = pts[0], pts[1], pts[2]
+    tau = torque(q)
+
+    # 팔
+    axG.plot(pts[:, 0], pts[:, 1], 'o-', color='0.35', lw=4, ms=7, zorder=3)
+    axG.scatter([0], [0], marker='s', s=90, color='k', zorder=5)
+    axG.annotate('관절1', p_base, textcoords='offset points', xytext=(-38, -6), fontsize=9)
+    axG.annotate('관절2', p_elbow, textcoords='offset points', xytext=(8, -14), fontsize=9)
+
+    # 끝점 힘 F (mg만큼 위로)
+    fscale = 0.045
+    axG.annotate('', xy=p_ee + fscale*F_tip, xytext=p_ee,
+                 arrowprops=dict(arrowstyle='-|>', color='tab:red', lw=2.6))
+    axG.annotate(r'$F=(0,\,mg)$', xy=p_ee + fscale*F_tip,
+                 textcoords='offset points', xytext=(6, 4), color='tab:red', fontsize=11)
+    axG.scatter([p_ee[0]], [p_ee[1]], s=70, color='saddlebrown', zorder=6)  # 추
+
+    # 각 관절의 모멘트팔: 힘선(수직선)까지의 수평거리 = x_ee - x_joint
+    # tau_i = (팔벡터 x F)_z = 힘선까지의 부호있는 수평거리 * |F|
+    for p_j, col, lab in [(p_base, 'tab:blue', r'$d_1$'), (p_elbow, 'tab:green', r'$d_2$')]:
+        # 관절에서 EEF의 힘 작용선(수직선 x=x_ee)까지의 수평 모멘트팔
+        axG.plot([p_j[0], p_ee[0]], [p_j[1], p_j[1]], color=col, lw=1.6, ls='--', zorder=2)
+        axG.annotate(lab, xy=((p_j[0]+p_ee[0])/2, p_j[1]),
+                     textcoords='offset points', xytext=(-4, 6), color=col, fontsize=11)
+    # EEF 힘 작용선 (연장)
+    axG.plot([p_ee[0], p_ee[0]], [min(p_base[1], p_elbow[1]) - 0.1, p_ee[1] + fscale*F_tip[1]],
+             color='tab:red', lw=0.9, ls=':', alpha=0.8, zorder=1)
+
+    axG.set_title(ttl, fontsize=11)
+    axG.set_aspect('equal'); axG.grid(True, alpha=0.25)
+    axG.set_xlim(-0.35, 1.75); axG.set_ylim(-0.25, 1.85)
+    axG.set_xlabel('x [m]'); axG.set_ylabel('y [m]')
+
+    # 관절토크 막대 (모멘트팔 d_i * |F| = |tau_i| 임을 강조)
+    bars = axB.bar([r'$\tau_1$', r'$\tau_2$'], tau, color=['tab:blue', 'tab:green'],
+                   edgecolor='k', width=0.6, zorder=3)
+    for b, t in zip(bars, tau):
+        axB.annotate(f'{t:.3f}', xy=(b.get_x() + b.get_width()/2, t),
+                     textcoords='offset points', xytext=(0, 4 if t >= 0 else -14),
+                     ha='center', fontsize=11, fontweight='bold')
+    axB.axhline(0, color='k', lw=0.8)
+    axB.set_ylim(-1.0, 12.5)
+    axB.set_ylabel(r'관절토크 $\tau = J^{\mathsf{T}}F$ [N·m]')
+    axB.set_title(r'$\tau_i = d_i\,\|F\|$  (모멘트팔 × 힘)', fontsize=11)
+    axB.grid(True, axis='y', alpha=0.3)
+
+# 자세①의 tau_2=0 을 한 번 더 못박기
+axes[0, 1].annotate('링크2 수직 →\n모멘트팔 $d_2=0$\n→ $\\tau_2=0$',
+                    xy=(1, 0.0), xytext=(0.55, 6.0), fontsize=10, color='tab:green',
+                    ha='center', arrowprops=dict(arrowstyle='->', color='tab:green', lw=1.4))
+
+fig.suptitle(r'힘의 쌍대 $\tau = J^{\mathsf{T}}F$: 같은 끝점 하중이 자세에 따라 다른 관절토크로 전달된다 (WE-2)',
+             y=1.0, fontsize=12.5)
+fig.tight_layout()
+fig.savefig('fig4_static_torque.png', dpi=140, bbox_inches='tight')
+plt.close(fig)
+
+print('생성 완료: fig1_velocity_ellipse.png, fig2_force_duality.png, fig3_gimbal.png, fig4_static_torque.png')
