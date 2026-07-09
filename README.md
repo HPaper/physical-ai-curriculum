@@ -23,7 +23,7 @@
 | 5 · 제어 | 17–24 | ✅ v3 |
 | 6 · 딥러닝 기초 | 25–28 | ✅ v3 |
 | 7 · Transformer·LLM | 29–33 | ⬜ 미작성 |
-| 8 · VLM | 34–36 | ⬜ 미작성 |
+| 8 · VLM | 34–36 | ✅ v3 |
 | 9 · 행동을 배우다 | 37–41 | ⬜ 미작성 |
 | 10 · VLA 계보 | 42–48 | ✅ v3 |
 | 11 · 실물 통합 | 49–50 | ✅ v3 |
@@ -45,7 +45,7 @@ part04-actuators/              14–16 모터·감속기·QDD
 part05-control/                17–24 PID→LQR→computed torque→임피던스→MPC→WBC
 part06-deep-learning/          25–28 딥러닝 기초           ✅ 작성완료
 part07-transformers-llm/       29–33 Transformer·LLM       (예정)
-part08-vlm/                    34–36 VLM                   (예정)
+part08-vlm/                    34–36 VLM                   ✅ 작성완료
 part09-robot-learning/         37–41 모방·생성·RL          (예정)
 part10-vla-lineage/            42–48 VLA 계보
 part11-real-robot-integration/ 49–50 하드웨어·Action 파이프라인
@@ -216,9 +216,9 @@ images/lecNN/                  강의별 그림 + 재현 스크립트(gen_figs.p
 
 | # | 제목 | 핵심 내용 | 실습 |
 |---|---|---|---|
-| 34 | ViT: 이미지를 패치 토큰으로 | 16×16 패치=단어, 해상도↔토큰 수, DINOv2(기하) vs CLIP류(의미) | ViT 추론 + 패치 임베딩 |
-| 35 | CLIP → SigLIP | 대조학습, zero-shot, SigLIP이 VLA 백본 표준이 된 이유. SSL 계보(→ 63강 복선) | CLIP zero-shot 물체 분류 |
-| 36 | VLM 조립: LLaVA 템플릿 | **encoder + projector + LLM** 도식 = 모든 VLA 백본의 뼈대. PaliGemma·Eagle·SmolVLM 미리보기 | SmolVLM LoRA VQA 파인튜닝 |
+| [34](part08-vlm/lec34-vit-patch-tokens.md) | ViT: 이미지를 패치 토큰으로 | 16×16 패치=단어, 해상도↔토큰 수, DINOv2(기하) vs CLIP류(의미) | ViT 추론 + 패치 임베딩 |
+| [35](part08-vlm/lec35-clip-siglip.md) | CLIP → SigLIP | 대조학습, zero-shot, SigLIP이 VLA 백본 표준이 된 이유. SSL 계보(→ 63강 복선) | CLIP zero-shot 물체 분류 |
+| [36](part08-vlm/lec36-vlm-assembly-llava.md) | VLM 조립: LLaVA 템플릿 | **encoder + projector + LLM** 도식 = 모든 VLA 백본의 뼈대. PaliGemma·Eagle·SmolVLM 미리보기 | SmolVLM LoRA VQA 파인튜닝 |
 
 핵심 자료: HF CV Course, Umar Jamil "PaliGemma from scratch".
 
