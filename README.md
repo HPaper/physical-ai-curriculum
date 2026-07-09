@@ -22,7 +22,7 @@
 | 4 · 구동(액추에이터) | 14–16 | ✅ v3 |
 | 5 · 제어 | 17–24 | ✅ v3 |
 | 6 · 딥러닝 기초 | 25–28 | ✅ v3 |
-| 7 · Transformer·LLM | 29–33 | ⬜ 미작성 |
+| 7 · Transformer·LLM | 29–33 | ✅ v3 |
 | 8 · VLM | 34–36 | ✅ v3 |
 | 9 · 행동을 배우다 | 37–41 | ⬜ 미작성 |
 | 10 · VLA 계보 | 42–48 | ✅ v3 |
@@ -44,7 +44,7 @@ part03-dynamics/               9–13  동역학·접촉·보행
 part04-actuators/              14–16 모터·감속기·QDD
 part05-control/                17–24 PID→LQR→computed torque→임피던스→MPC→WBC
 part06-deep-learning/          25–28 딥러닝 기초           ✅ 작성완료
-part07-transformers-llm/       29–33 Transformer·LLM       (예정)
+part07-transformers-llm/       29–33 Transformer·LLM       ✅ 작성완료
 part08-vlm/                    34–36 VLM                   ✅ 작성완료
 part09-robot-learning/         37–41 모방·생성·RL          (예정)
 part10-vla-lineage/            42–48 VLA 계보
@@ -204,11 +204,11 @@ images/lecNN/                  강의별 그림 + 재현 스크립트(gen_figs.p
 
 | # | 제목 | 핵심 내용 | 실습 |
 |---|---|---|---|
-| 29 | 토큰과 임베딩 | BPE 토크나이저, 임베딩 공간. **복선: 로봇 행동도 토큰이 된다(42강 RT-2, 44강 FAST)** | HF tokenizers; 임베딩 시각화 |
-| 30 | Attention 해부 | Q/K/V, self-attention, multi-head. **비유: 상태 의존적 gain scheduling** | attention 가중치 시각화 |
-| 31 | Transformer 완성 | residual, LayerNorm, positional encoding, causal mask, KV 캐시 | nanoGPT 훈련 (수 분) |
-| 32 ★ | LLM의 탄생 | 사전학습, 스케일링 법칙, 창발, in-context learning | nanoGPT 스케일 실험 또는 생략 |
-| 33 | 사후학습: 모델 길들이기 | SFT, RLHF, **LoRA/PEFT(→ VLA 파인튜닝 핵심)**. **복선: 45강 RECAP의 RL post-training** | SmolLM2 LoRA 파인튜닝 |
+| [29](part07-transformers-llm/lec29-tokens-embeddings.md) | 토큰과 임베딩 | BPE 토크나이저, 임베딩 공간. **복선: 로봇 행동도 토큰이 된다(42강 RT-2, 44강 FAST)** | HF tokenizers; 임베딩 시각화 |
+| [30](part07-transformers-llm/lec30-attention.md) | Attention 해부 | Q/K/V, self-attention, multi-head. **비유: 상태 의존적 gain scheduling** | attention 가중치 시각화 |
+| [31](part07-transformers-llm/lec31-transformer-complete.md) | Transformer 완성 | residual, LayerNorm, positional encoding, causal mask, KV 캐시 | nanoGPT 훈련 (수 분) |
+| [32](part07-transformers-llm/lec32-birth-of-llm.md) ★ | LLM의 탄생 | 사전학습, 스케일링 법칙, 창발, in-context learning | nanoGPT 스케일 실험 또는 생략 |
+| [33](part07-transformers-llm/lec33-post-training.md) | 사후학습: 모델 길들이기 | SFT, RLHF, **LoRA/PEFT(→ VLA 파인튜닝 핵심)**. **복선: 45강 RECAP의 RL post-training** | SmolLM2 LoRA 파인튜닝 |
 
 핵심 자료: Karpathy "Let's build GPT", HF LLM Course.
 
