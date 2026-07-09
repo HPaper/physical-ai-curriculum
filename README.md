@@ -27,8 +27,8 @@
 | 9 · 행동을 배우다 | 37–41 | ✅ v3 |
 | 10 · VLA 계보 | 42–48 | ✅ v3 |
 | 11 · 실물 통합 | 49–50 | ✅ v3 |
-| 12 · 환경·시뮬레이션 | 51–54 | 부분(52 ✅ v3 · 51·53·54 ⬜) |
-| 13 · 데이터·평가 | 55–57 | ⬜ 미작성 |
+| 12 · 환경·시뮬레이션 | 51–54 | ✅ v3 |
+| 13 · 데이터·평가 | 55–57 | ✅ v3 |
 | 14 · 시스템 통합 | 58–62 | ✅ v3 |
 | 15 · 프론티어·자립 | 63–65 | ⬜ 미작성 |
 
@@ -50,7 +50,7 @@ part09-robot-learning/         37–41 모방·생성·RL          ✅ 작성완
 part10-vla-lineage/            42–48 VLA 계보
 part11-real-robot-integration/ 49–50 하드웨어·Action 파이프라인
 part12-environment-simulation/ 51–54 시뮬레이터·물리엔진·합성데이터·world model
-part13-data-evaluation/        55–57 데이터·벤치마크        (예정)
+part13-data-evaluation/        55–57 데이터·벤치마크        ✅ 작성완료
 part14-system-integration/     58–62 ROS2·추정·식별·안전·종합
 part15-frontier/               63–65 프론티어·논문읽기·캡스톤 (예정)
 images/lecNN/                  강의별 그림 + 재현 스크립트(gen_figs.py)
@@ -263,18 +263,18 @@ images/lecNN/                  강의별 그림 + 재현 스크립트(gen_figs.p
 
 | # | 제목 | 핵심 내용 | 실습 |
 |---|---|---|---|
-| 51 ★ | 시뮬레이터 지형도 | MuJoCo/robosuite, ManiSkill3, Isaac Lab, Genesis, RoboCasa+MimicGen. sim2real 갭 | ManiSkill3/robosuite 구동 |
+| [51](part12-environment-simulation/lec51-simulator-landscape.md) ★ | 시뮬레이터 지형도 | MuJoCo/robosuite, ManiSkill3, Isaac Lab, Genesis, RoboCasa+MimicGen. sim2real 갭 | ManiSkill3/robosuite 구동 |
 | [52](part12-environment-simulation/lec52-simulation-internals.md) | 시뮬레이션의 내부 | 물리엔진: 적분기(explicit/implicit), 접촉 솔버(LCP/soft), 타임스텝·안정성. **sim2real 물리 원인 목록** | 타임스텝·솔버 파라미터 실험 |
-| 53 | 합성 데이터와 도메인 랜덤화 | MimicGen(데이터 증식), DreamGen/Cosmos(neural trajectory), 도메인 랜덤화 — "데이터를 시뮬로 만든다" | MimicGen류 데이터 증식 실습 |
-| 54 | 학습된 world model (맛보기) | 행동 조건부 영상 생성이 환경을 대체(V-JEPA 2·Cosmos·1X WM·DreamZero). 63강 심화의 다리 | world model 추론 데모 |
+| [53](part12-environment-simulation/lec53-synthetic-data-domain-randomization.md) | 합성 데이터와 도메인 랜덤화 | MimicGen(데이터 증식), DreamGen/Cosmos(neural trajectory), 도메인 랜덤화 — "데이터를 시뮬로 만든다" | MimicGen류 데이터 증식 실습 |
+| [54](part12-environment-simulation/lec54-learned-world-models.md) | 학습된 world model (맛보기) | 행동 조건부 영상 생성이 환경을 대체(V-JEPA 2·Cosmos·1X WM·DreamZero). 63강 심화의 다리 | world model 추론 데모 |
 
 ## Part 13 — 데이터와 평가 [공통]
 
 | # | 제목 | 핵심 내용 | 실습 |
 |---|---|---|---|
-| 55 | 데이터셋과 수집 | OXE·DROID·BridgeData·AgiBot World, LeRobotDataset v3. 수집 도구(ALOHA·GELLO·UMI·SO-101) | HF Hub 데이터셋 로드·시각화 |
-| 56 | LeRobot 딥다이브 | 라이브러리 구조, 탑재 정책(ACT/DP/π0/SmolVLA/GR00T), async. **메인 실습 도구** | **SmolVLA를 LIBERO에 파인튜닝** — 최대 실습 |
-| 57 | 벤치마크와 평가의 함정 | LIBERO(포화), **LIBERO-Plus(교란 시 붕괴)**, SimplerEnv, RoboArena/RoboChallenge. 평가 통계 현실(N=10~20, CI 없음) | LIBERO에서 파인튜닝 모델 평가 |
+| [55](part13-data-evaluation/lec55-datasets-collection.md) | 데이터셋과 수집 | OXE·DROID·BridgeData·AgiBot World, LeRobotDataset v3. 수집 도구(ALOHA·GELLO·UMI·SO-101) | HF Hub 데이터셋 로드·시각화 |
+| [56](part13-data-evaluation/lec56-lerobot-deep-dive.md) | LeRobot 딥다이브 | 라이브러리 구조, 탑재 정책(ACT/DP/π0/SmolVLA/GR00T), async. **메인 실습 도구** | **SmolVLA를 LIBERO에 파인튜닝** — 최대 실습 |
+| [57](part13-data-evaluation/lec57-benchmarks-evaluation.md) | 벤치마크와 평가의 함정 | LIBERO(포화), **LIBERO-Plus(교란 시 붕괴)**, SimplerEnv, RoboArena/RoboChallenge. 평가 통계 현실(N=10~20, CI 없음) | LIBERO에서 파인튜닝 모델 평가 |
 
 ## Part 14 — 시스템 통합 [로봇·통합]
 
