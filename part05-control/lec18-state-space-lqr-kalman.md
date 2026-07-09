@@ -433,3 +433,9 @@ def run(theta0_deg, umax=1e9, T=10.0):
 — **뒷받침**: 번역 박스의 "SSM 레이어 = 학습된 상태공간 모델 $x_{k+1} = \bar Ax_k + \bar Bu_k$" 대응(S4).
 
 *수치 재현성: 본문·그림의 모든 수치(WE-1 rank 2/1/4와 가관측성 4/2, WE-2의 $K = [-3.162, -39.608, -4.425, -8.480]$·닫힌루프 고유값·60° 안정/65° 낙하, Q/R 스윕 표, WE-3의 위치 4.86→2.10 mm·속도 0.686→0.070 m/s·$K_1 = 0.119$, 실습의 basin 경계 63.26°/63.27°(solve_ivp/MuJoCo)와 47.7°(umax=15 N), `mjd_transitionFD`의 $A$ 복원)는 본문 코드 블록과 `images/lec18/gen_figs.py`의 실행 출력이다 — numpy 1.26 / scipy 1.15 / mujoco 3.2.5 기준 재현 확인.*
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 17. 피드백 제어 최소 코스 — 딥러닝 엔지니어를 위한 하루 압축](lec17-feedback-control-basics.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 19. 관절 제어와 computed torque — 비선형을 지우는 기술](lec19-joint-control-computed-torque.md) ➡

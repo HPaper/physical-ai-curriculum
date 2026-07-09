@@ -329,3 +329,9 @@ print("max|캐시-재계산| =", np.max(np.abs(np.array(oc)-np.array(of))))   # 
 — **뒷받침**: Block/CausalSelfAttention/LayerNorm 구현이 E1~E3의 코드 대응(pre-LN, tril causal mask, KV 캐시 경로), 실습 A안.
 
 *수치 재현성: 핵심 수식·Worked Example·그림의 numpy 토이 수치는 `images/lec31/gen_figs.py`와 본문 코드 블록의 실행 출력이다 — causal attention의 하삼각화(상삼각 가중치 정확히 0, 행 합 1, 토큰0=$[1,0,0,0]$), PE 내적의 상대거리 의존($\Delta{=}3$일 때 base와 무관하게 25.5870, 자기내적 $=d/2=32$), 미니 블록 forward의 shape 보존(5×16→5×16)과 잔차 유무 cos(0.396 vs 0.038), 30층 스택 기울기 노름(잔차無 $2.06\times10^{-11}$ vs 잔차有 30.56), KV 캐시와 재계산의 최대차 $3.3\times10^{-16}$. numpy 1.26 / scipy 1.15 / matplotlib 3.5 기준 재현 확인. **이 토이는 개념 재현용 CPU 시뮬레이션이며 실제 대형 Transformer/GPT 가중치가 아니다** — pre-LN 안정성·RoPE 등 구조 주장은 위 [1]–[4] 1차 출처.*
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 30. Attention 해부](lec30-attention.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 32. LLM의 탄생](lec32-birth-of-llm.md) ➡

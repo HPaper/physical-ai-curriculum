@@ -377,3 +377,9 @@ WE-3의 `M_mat/C_mat/g_vec` 코드를 기반으로 한다.
 
 [5] Franka Robotics, FCI(Franka Control Interface) 문서. https://frankarobotics.github.io/docs/
 — **뒷받침**: "토크 지령 모드에서 중력·마찰 자동 보상" — '왜 이 강의가 필요한가'와 토론 질문 3의 실기 사례 (50강과 동일 출처).
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 09. 동역학의 재료 — 질량, 관성텐서, 운동량](lec09-dynamics-ingredients.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 11. 뉴턴-오일러와 계산 동역학 — 라이브러리가 실제로 쓰는 알고리즘](lec11-newton-euler.md) ➡

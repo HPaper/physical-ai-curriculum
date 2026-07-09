@@ -312,3 +312,9 @@ dino = torch.hub.load('facebookresearch/dinov2', 'dinov2_vits14').eval()
 — **뒷받침**: DINOv2+SigLIP를 함께 쌓는 것이 공간·조작 태스크에 유리(§4의 "VLA는 둘 다 쓴다", 36강 예고).
 
 *수치 재현성: 본문·캡션·WE의 numpy 토이 수치는 `images/lec34/gen_figs.py`와 본문 코드 블록의 실행 출력이다 — WE-1의 토큰 수 $14{\times}14{=}196$·해상도 2배 시 토큰 784(4배)·attention 16배·patchify vs conv 최대 차 $2.22\times10^{-15}$(본문 코드) / $8.9\times10^{-16}$(그림 3, 다른 랜덤 시드·크기), WE-2의 물체 패치 상호 attention 평균 0.235 대 전체 0.062·패치6 최근접 $[11,10,7,6]$·2D PE 내적 이웃 7.535>먼곳 5.127>자기 8.000, 그림 5의 밝은 패치 상호 attention 0.163 대 전체 0.062(그림용 다른 특징 구성). numpy 1.26 / scipy 1.15 / matplotlib 3.5 기준 재현 확인. **이 토이는 개념 재현용 CPU 시뮬레이션이며 실제 ViT/DINOv2/CLIP 모델·가중치나 대량 사전학습이 아니다** — ViT의 JFT-300M 추월·DINOv2 조밀 대응·CLIP zero-shot의 실측 수치·설계는 위 [1][2][5] 1차 출처.*
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 33. 사후학습: 모델 길들이기](../part07-transformers-llm/lec33-post-training.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 35. CLIP에서 SigLIP으로](lec35-clip-siglip.md) ➡

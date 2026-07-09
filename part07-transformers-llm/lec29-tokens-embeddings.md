@@ -286,3 +286,9 @@ print("||king - 10*king|| =", round(float(np.linalg.norm(k-10*k)), 4))  # 12.727
 — **뒷받침**: 궤적을 DCT→양자화·희소화→**BPE**로 압축, 순진한 스텝별 양자화의 토큰 낭비 문제(§5·그림 4·오해 3·복선). 소관은 44강.
 
 *수치 재현성: 본문·캡션·WE의 numpy 토이 수치는 `images/lec29/gen_figs.py`와 본문 코드 블록의 실행 출력이다 — WE-1의 BPE 초기 39토큰·병합 `(u,g)`빈도9·`(ug,_)`빈도6·`(h,ug_)`빈도4·3회 후 20토큰, 그림 2의 5단어 코퍼스 115→45토큰·병합규칙 8개, WE-2의 king−man+woman=[-1,1,0,0]·queen 코사인 1.0·`cos(king,10·king)=1.0`·`‖king−10·king‖=12.73`, 그림 3의 잡음 있는 8단어 임베딩에서 queen 0.999·princess 0.988·woman 0.700, 그림 1의 E[cat]=[-0.42,-0.76,-0.37,0.02] 룩업. numpy 1.26 / scipy 1.15 / matplotlib 3.5 기준 재현 확인. **이 토이는 개념 재현용 CPU 시뮬레이션이며 실제 word2vec/GPT 임베딩이나 대형 모델이 아니다**(임베딩 축을 사람이 설계했다) — word2vec·GPT-2·RT-2·FAST의 실측 임베딩·토크나이저·수치는 위 [1][4][6][7] 1차 출처.*
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 28. CNN과 시각 표현](../part06-deep-learning/lec28-cnn-visual-representations.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 30. Attention 해부](lec30-attention.md) ➡

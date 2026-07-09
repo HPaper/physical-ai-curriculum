@@ -367,3 +367,9 @@ print("지연 악화(th=0.7):", "lat=8 →", run(0.7,8), " lat=40 →", run(0.7,
 [17] MoveIt, Servo 실시간 튜토리얼. https://moveit.picknik.ai/main/doc/examples/realtime_servo/realtime_servo_tutorial.html — **뒷받침**: Cartesian twist→관절 명령의 ROS 2 구현 계층.
 
 *수치 재현성: 핵심 수식(E1~E3)·Worked Example·그림의 개념 재현 수치는 CPU numpy 토이 모델의 실행 출력이다(실제 모델 다운로드·GPU 없이 청크 실행의 수학만 재현). `images/lec50/gen_figs.py`와 본문 코드 블록으로 재현되는 값 — WE-1/그림 2: temporal ensembling 지터 naive 134.4×10⁻³ → 앙상블 21.9×10⁻³(6.1배 감소), 추종 RMS 55.4→19.3 mrad, $w(m{=}0.1)$ 반질량 나이 ≈6.9스텝. WE-2/그림 3: RTC 경계 점프 naive 0.237 → 동결+soft mask 0.074 rad(3.2배 감소, 지연 $d{=}6$스텝=120ms@50Hz). WE-3: 비동기 큐 재요청 8/17/31회(threshold 0.2/0.7/0.9), 평균 잔량 26.1/38.2/43.0, 지연 40스텝에서 idle 35스텝. 그림 4: 저크 RMS ZOH 5.88×10⁷ → 선형 7.14×10⁵(82배↓) → 3차 2.52×10³(선형 대비 284배↓), 추종 RMS ZOH/3차 14.2배. 그림 1(보강): 모델별 action space 지형도(표 수치 시각화) — numpy 1.26 / matplotlib 3.5 기준. 모델별 action space·73ms·RTC·async 등 1차 자료 수치(참고문헌 [1]~[17])는 별도 팩트체크로 검증됨(위 재현 수치와 구분).*
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 49. VLA 로봇 하드웨어 지형도 — 학습 정책의 눈으로 본 로봇](lec49-robot-hardware.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 51. 시뮬레이터 지형도](../part12-environment-simulation/lec51-simulator-landscape.md) ➡

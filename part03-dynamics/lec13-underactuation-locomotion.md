@@ -369,3 +369,9 @@ for k in range(20):                  # 20 스텝
 
 [9] J. Englsberger, C. Ott, A. Albu-Schäffer, "Three-Dimensional Bipedal Walking Control Based on Divergent Component of Motion," IEEE Trans. on Robotics, 2015.
 — **뒷받침**: E3의 "DCM" 명칭과 3D 확장이 존재한다는 언급.
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 12. 접촉, 마찰, 파지 — 불연속의 물리](lec12-contact-friction-grasping.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 14. 전기 모터와 전류 루프 — 힘은 어디서 오는가](../part04-actuators/lec14-motors-current-loop.md) ➡

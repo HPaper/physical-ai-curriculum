@@ -330,3 +330,9 @@ print("7B를 200Hz(5ms)로?", round(latency_ms(7e9,256)/5, 0), "배 초과")
 [19] C. Cui et al., "OpenHelix: A Short Survey, Empirical Analysis, and Open-Source Dual-System VLA Model for Robotic Manipulation," arXiv:2505.03912, 2025.5. https://arxiv.org/abs/2505.03912 — **뒷받침**: §7.5·흔한 오해 1 — 기존 dual-system(느린 S2 / 빠른 S1) 아키텍처의 구조 설계를 정리·비교, 경계가 모델마다 다르게 그어짐을 뒷받침하는 서베이.
 
 *수치 재현성: 본문·그림의 모든 정량 수치는 `images/lec48/gen_figs.py`(numpy/matplotlib, CPU만)의 실행 출력이다. — **E1·WE-1·fig1·fig2**: Helix 02 인접층 배율 25x / 5x / 20x, GR00T 12x / 8.3x, 정착시간 분리 여유(S1 6.3x · S0 1.3x · 전류루프 5.0x); 층 주파수는 공개 1차 자료([1][3][18][10][13])의 값. **E2·WE-2·fig3**: 온보드 지연·최대 주파수(Helix S2 7B→358ms/2.8Hz, π0 3.3B→169ms/5.9Hz, SmolVLA 450M→5.8ms/174Hz, Atlas 450M→2.9ms/347Hz, Redwood 160M→1.0ms/977Hz, Helix S1 80M→0.51ms/1953Hz, Helix S0 10M→0.06ms/15625Hz, 7B의 200Hz 예산 72배 초과) — 파라미터 수는 1차 자료, 온보드 실효 처리량(10 TFLOP/s)·처리 토큰 수(S2형 256 / 제어헤드 32)는 자릿수 추정치이며 $f_{\max}\propto 1/N$ 스케일링을 보이기 위한 것(절대값 아님). numpy 1.26 / matplotlib 3.5 기준 재현 확인.*
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 47. 작은 모델들과 계보도 총정리 — SmolVLA에서 세 논쟁 축까지](lec47-small-models-lineage.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 49. VLA 로봇 하드웨어 지형도 — 학습 정책의 눈으로 본 로봇](../part11-real-robot-integration/lec49-robot-hardware.md) ➡

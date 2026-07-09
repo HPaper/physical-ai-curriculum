@@ -321,3 +321,9 @@ for n, p in m.named_parameters():
 — **뒷받침**: projector·이미지 토큰 concat·prefix 마스크의 코드 수준 구현(읽을거리 3·WE-2 대조). (2차, 교육 자료)
 
 *수치 재현성: 본문·그림·Worked Example의 numpy 토이 수치는 `images/lec36/gen_figs.py`와 본문 코드 블록의 실행 출력이다 — WE-1의 선형 projector 파라미터 $1152\cdot2304+2304=2{,}656{,}512$(백본의 0.0886%)·2층 MLP 7,967,232·이미지 토큰 256(448px면 1024, 4배)·시퀀스 $T{=}276$에서 이미지 비율 92.8%·448px attention 14.3배·shape 흐름 $(256,1152)\to(256,2304)\to(276,2304)$, WE-2의 텍스트→이미지 평균 주의 0.453·이미지 유무 텍스트 출력 변화 평균 0.521·이미지 내용 변화 시 0.476, 그림 3의 텍스트→이미지 평균 주의 0.57(시드 36). numpy 1.26 / matplotlib 3.5 기준 재현 확인. **이 토이는 개념 재현용 CPU 시뮬레이션이며 실제 LLaVA/PaliGemma/SmolVLM 가중치가 아니다** — 실측 구조·토큰수·학습 레시피는 위 [1][2][4][5] 1차 출처. PaliGemma(SigLIP-So400m 1152 + Gemma 2B 2304 + 256 토큰)·LLaVA(2단계·576 토큰)·Eagle(64 토큰)·SmolVLM(pixel-shuffle)의 부품 수치는 각 논문 1차 확인.*
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 35. CLIP에서 SigLIP으로](lec35-clip-siglip.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 37. 모방학습이 무너지는 방식](../part09-robot-learning/lec37-imitation-learning-failure.md) ➡

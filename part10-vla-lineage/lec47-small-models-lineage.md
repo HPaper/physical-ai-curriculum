@@ -263,3 +263,9 @@ print(abs(F1).max(), abs(F2).max())        # 0.74 N, 7.96 N  → 10.8배
 — **뒷받침**: 7B VLM(인지)+~300M DiT(행동)의 명시적 분리, naive 토큰화 대비 큰 폭 향상.
 
 *수치 재현성: 핵심 수식·Worked Example·그림의 모든 수치는 `images/lec47/gen_figs.py`(numpy만, CPU)의 실행 출력이다 — 개념을 numpy 토이로 재현한 것이며 실제 모델 다운로드/GPU는 쓰지 않는다. 구체적으로: **E1·WE-1**의 토큰 예산 표(896/14→4096, 512/16 shuffle 없음→1024, r=2→256, **SmolVLA r=4→64**, 384/16 r=3→64)와 절감 배율 64배·3카메라 192 vs 12288(그림 1). **E2·WE-2**의 가중치 바닥(SmolVLA fp16 0.90GB·fp32 1.80GB, π0 fp32 13.20GB, 실측 ~2GB vs ~14GB 대조, 약 15배)과 8GB/24GB 경계(그림 2). **E3·WE-3**의 latent action null space 토이(동일 x(t)에서 최대 힘 0.74N vs 7.96N = 10.8배 차, 정지 프레스 구간 힘·강성 완전 미결정 — 그림 4). 그림 3(계보 그래프)은 세 논쟁 축 띠 위 노드 배치로, 한 장 요약 mermaid를 "축" 관점으로 재구성. numpy 1.26 / matplotlib 3.5 기준 재현 확인. SmolVLA 파라미터 450M·토큰 수치는 참고문헌 [1], 추론 메모리 ~2GB/~14GB는 [2]. SmolVLA의 데이터는 SO-100 수집(SO-101 아님) — 본문·[1] 일치.*
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 46. GR00T 패밀리 — dual-system, 데이터 피라미드, 그리고 world model로 가는 길](lec46-groot-family.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 48. 비공개 진영의 지향점 — 회사별 베팅으로 읽는 VLA 설계 철학](lec48-proprietary-vla.md) ➡

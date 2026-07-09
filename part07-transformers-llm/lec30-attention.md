@@ -281,3 +281,9 @@ print("causal 행합:", Wc.sum(1))               # [1 1 1 1 1] (여전히 정규
 — **뒷받침**: 내적=유사도, 질의·키·값의 기하학적 직관(E1 ①·②의 시각화). (2차, 교육 자료)
 
 *수치 재현성: 본문·그림·Worked Example의 numpy 토이 수치는 `images/lec30/gen_figs.py`와 본문 코드 블록의 실행 출력이다 — WE-1의 $QK^\top$·행1 가중치 $[0.768,0.045,0.187]$(스케일) vs $[0.867,0.016,0.117]$(무스케일)·행3 균등 $[0.333]\times3$, WE-2의 causal 토큰4 행 $[0.095,0.334,0.202,0.369,0]$·전체/causal 행합=1, multi-head 두 head 가중치 평균 차이 0.081, 내적 분산 $d{=}256$에서 std 16.22 ≈ $\sqrt{256}$ → $\div\sqrt d$ 후 1.01, $d{=}64$ softmax 엔트로피 0.60(무스케일)/1.52($\div\sqrt d$)/1.61(균등 최대)·최대 가중치 0.80/0.31. numpy 1.26 / matplotlib 3.5 (시드 42 고정; WE-1은 고정 정수 입력이라 난수 없음) 기준 재현 확인. **이 토이는 개념 재현용 CPU 시뮬레이션이며 실제 대형 Transformer 가중치가 아니다** — 스케일드 닷프로덕트·multi-head의 정식 정의와 대규모 실증은 위 [1] 1차 출처.*
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 29. 토큰과 임베딩](lec29-tokens-embeddings.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 31. Transformer 완성](lec31-transformer-complete.md) ➡

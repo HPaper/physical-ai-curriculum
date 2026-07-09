@@ -332,3 +332,9 @@ LoRA는 기본으로 SmolVLA LM expert의 `q_proj`·`v_proj`와 state/action 투
 — **뒷받침**: LIBERO 4 스위트(Spatial/Object/Goal/Long)×각 10 태스크, 태스크당 50 시연·평가 시도, 성공 판정(목표 술어 ≥10 스텝 유지); SmolVLA를 LIBERO에서 처음부터 학습 시 낮은 성공률 사례(사전학습+파인튜닝 필요). (Issue는 커뮤니티 보고 — 2차, 방법론 정본은 LIBERO 논문.)
 
 *수치 재현성: 핵심 수식·Worked Example·그림의 numpy 토이 수치는 `images/lec56/gen_figs.py`(순수 numpy/scipy/matplotlib, CPU, 시드 고정)의 실행 출력이다 — 개념 재현용 시뮬레이션이며 실제 정책 다운로드·GPU·LeRobot 실행이 아니다. **WE-1/그림 3(b)**: async 큐(H=50, 600 tick) — threshold 0.3/0.5/0.7/0.9에서 재요청 14/19/28/55회·평균잔량 29.3/34.2/39.1/44.0(idle 0), 지연 스윕(th=0.7) lat=6/20/40/55에서 idle 0/0/50/160 tick(언더런 경계 $d\approx gH=35$). **WE-2/그림 4**: 정규화 파이프라인(D=6, H=16) — 정규화공간 max|err| 0.0698, 같은 stats 역정규화 0.1814 rad, 틀린 stats(0.5배) 1.2509 rad(6.9배 붕괴), temporal ensembling 지터 naive→ens 103.8e-3→22.2e-3(4.7배↓). **그림 1**: LeRobot 아키텍처 도식. **그림 2**: 탑재 정책 비교표(1차 자료 [4]~[8] 수치). numpy 1.26/scipy 1.15/matplotlib 3.5 기준 재현 확인. 정책 목록·async 수치·LoRA 명령·LIBERO 구조 등 실측은 코드가 아니라 참고문헌 [1][2][7][10][11][12]로 확인했다.*
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 55. 데이터셋과 수집](lec55-datasets-collection.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 57. 벤치마크와 평가의 함정](lec57-benchmarks-evaluation.md) ➡

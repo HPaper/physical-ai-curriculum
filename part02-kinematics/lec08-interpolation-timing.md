@@ -354,3 +354,9 @@ def stitch(q_now, v_now, a_now, chunk, t_bridge):
 — **뒷받침**: 1kHz 명령 인터페이스가 명령 열의 속도·가속·저크 한계를 검사한다는 실무 근거("왜 이 강의가 필요한가") (50강·README와 동일 출처).
 
 *본문·그림의 수치(WE-1 피크 3.0000/18.4752/384.0, WE-2 총 시간 0.65/0.75 s, WE-3 표, fig2의 T=0.65/0.75/0.76 s, 실습의 −15.5 mrad·10.0→0.125 rad/s·오버슛 0.66)는 모두 본문 코드와 `images/lec08/gen_figs.py`의 실행 출력이다 — numpy 1.26 기준 재현 확인.*
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 07. 역기구학 — 해석해, 수치해, 그리고 다해성](lec07-inverse-kinematics.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 09. 동역학의 재료 — 질량, 관성텐서, 운동량](../part03-dynamics/lec09-dynamics-ingredients.md) ➡

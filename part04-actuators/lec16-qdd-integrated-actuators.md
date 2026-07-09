@@ -350,3 +350,9 @@ flowchart LR
 — **뒷받침**: 실습의 `armature`(관절 반사 관성 파라미터)·`solref`·`mj_contactForce` 의미.
 
 *수치 재현성: 본문·그림의 모든 수치(WE-1의 추정 오차 5/8/35/65%, WE-2의 $m_{app}$ 1.06/6.56 kg·$v_0$ 3.13 m/s·해석 피크 721/1793 N·RK4 피크 732/1859 N·피크 비 2.54≈2.49·그림 3의 접촉 시간 약 15/37 ms(해석 반주기 14.5/36.0 ms)와 임펄스 비 $2 m_{app} v$ 기준 약 6배, WE-3의 −3 dB 998 Hz/30.4 Hz/5.24 Hz, 실습의 피크 374/595/1850 N과 armature 스윕 374→1850 N)는 본문 코드 블록과 `images/lec16/gen_figs.py`의 실행 출력이다 — numpy 1.26 / scipy 1.15 / mujoco 3.2.5 기준 재현 확인.*
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 15. 감속기와 전동 — 토크를 사고 속도를 파는 시장](lec15-gears-transmissions.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 17. 피드백 제어 최소 코스 — 딥러닝 엔지니어를 위한 하루 압축](../part05-control/lec17-feedback-control-basics.md) ➡

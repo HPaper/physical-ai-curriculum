@@ -311,3 +311,9 @@ T=320 개선 = 71.2배
 — **뒷받침**: 모방 vs 보상 학습의 구분(0강 축 2), on-policy/off-policy 개념(토론 질문 7의 배경).
 
 *수치 재현성: 본문 그림·Worked Example의 numpy 토이 수치는 `images/lec37/gen_figs.py`와 본문 코드 블록의 실행 출력이다 — WE-1의 BC 비용 로그-로그 기울기 **1.952**(≈2, $O(\varepsilon T^2)$), Monte Carlo가 해석적 합 $\sum_t[1-(1-\varepsilon)^t]$와 일치, $J(320)/J(80)=14.14$; WE-2의 BC 기울기 1.952·DAgger 기울기 1.024(≈1, $O(\varepsilon T)$)·$T=320$에서 71.2배 개선, 고정 $T=200$ 라운드별 비용 $26.96/5.34/1.93/0.75/0.39$; 그림 1(드리프트)·그림 2(스케일링, BC slope 1.952 / DAgger slope 1.024)·그림 3(DAgger 루프)·그림 4(covariate shift 도식). numpy 1.26 / matplotlib 3.5 기준 재현 확인. **이 토이는 compounding error·DAgger의 스케일링 법칙을 개념 재현하는 CPU 시뮬레이션이며, 실제 로봇 정책·시연 데이터·학습이 아니다** — Ross&Bagnell·DAgger의 이론적 보장은 위 [2][3] 1차 출처.*
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 36. VLM 조립: LLaVA 템플릿](../part08-vlm/lec36-vlm-assembly-llava.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 38. ACT와 action chunking](lec38-act-action-chunking.md) ➡

@@ -379,3 +379,9 @@ print(np.round(jac_fd(p_ur, np.zeros(6)), 4))
 — **뒷받침**: 스크류 이론·PoE의 병행 표준 문헌(선택 심화) — 본문 주장에 필수는 아니며 표기 대조용.
 
 *본 강의의 그림은 `images/lec04/gen_figs.py`로 생성했으며, 본문 수치는 같은 코드 경로(WE-1·WE-2·§4·실습 3)를 실제 실행해 확인한 값이다.*
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 03. 강체 변환 — SE(3), 동차변환, 좌표계의 규율](lec03-se3-transforms.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 05. 자코비안 — 속도의 사상, 힘의 쌍대](lec05-jacobian.md) ➡

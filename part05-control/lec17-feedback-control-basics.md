@@ -364,3 +364,9 @@ def run_pid(Kp, Ki, Kd, f_ctrl, T=8.0, target=np.pi/3):
 — **뒷받침**: 상용 토크 제어 인터페이스가 1kHz 제어 주기를 요구한다는 사례(WE-3 말미, 토론 질문 7 — 50강과 동일 출처).
 
 *본문·그림의 수치(WE-1 극점·오버슛 16.3%·피크 3.63 s·정상오차 0.5→0, WE-2의 $K_u = 10.16$·$T_u = 2.020$ s·진폭비 0.127/1.000/5.173, E3의 $\omega_c = 0.786$·$\varphi_m = 51.8°$·$\tau_{\max} = 1.151$ s, WE-3 표의 오버슛 0/10.0%·정착 0.198/0.739 s·발산, 실습의 중력 오프셋 0.324 rad·$K_u \approx 10$·$T_u \approx 0.545$ s·Z-N 게인 (6.0, 22.0, 0.41)·오버슛 52%·windup 오버슛 256°→30°)는 모두 본문 코드와 `images/lec17/gen_figs.py`의 실행 출력이다 — numpy 1.26 / scipy 1.15 / mujoco 3.2.5 기준 재현 확인.*
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 16. QDD와 proprioceptive actuation — MIT Cheetah가 바꾼 설계 철학](../part04-actuators/lec16-qdd-integrated-actuators.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 18. 상태공간, LQR, 칼만 필터 — 최적화로서의 제어와 추정](lec18-state-space-lqr-kalman.md) ➡

@@ -427,3 +427,9 @@ print("총 질량:", round(m.body_subtreemass[0], 3), "kg / 전신 COM:", np.rou
 
 [6] (2차, 영상) Veritasium, "The Bizarre Behavior of Rotating Bodies," YouTube, 2019. https://www.youtube.com/watch?v=1VPfZ_XzisU
 — **뒷받침**: 읽을거리 3 — Dzhanibekov 효과의 실증 영상 자료(수치 주장 없음, 시각 자료 용도).
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 08. 보간과 시간 파라미터화 — 학습 스택 아래에서 살아남는 최소 궤적론](../part02-kinematics/lec08-interpolation-timing.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 10. 라그랑주 동역학 — 매니퓰레이터 방정식](lec10-lagrangian-dynamics.md) ➡

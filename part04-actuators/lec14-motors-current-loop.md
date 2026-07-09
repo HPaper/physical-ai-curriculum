@@ -359,3 +359,9 @@ print(f"유지 전류 {d.ctrl[0]/Kt:.1f} A, 120 s 후 권선 {T:.1f} °C")
 — **뒷받침**: 실습의 `actuator/motor`·`gear`·`ctrlrange` 의미(액추에이터 전달 모델). 본 강의에서 실행·검증함.
 
 *본문·그림의 수치(WE-1의 무부하 240 rad/s·스톨 4.8 Nm·코너 190 rad/s·최대 출력 288 W, WE-2의 $\tau_e$ = 0.6 ms·$K_p$ = 1.885·$K_i$ = 3142·루프 20/10/5 kHz의 최대 전류 10.21/14.23/21.26 A, WE-3의 $i_{cont}$ = 10 A·$t_{lim}$ = 142.3/14.1 s·듀티 사이클 평균 22.5 W와 시뮬 피크 77.1 °C, FOC 검증 $i_d$ = 0·$i_q$ = 10 A, 실습의 중력 토크 40.3 Nm·유지 전류 13.3 A·125 °C 도달 ~101 s)는 모두 본문 코드 블록과 `images/lec14/gen_figs.py`의 실행 출력이다 — numpy 1.26 / scipy 1.15 / mujoco 3.2.5 기준 재현 확인.*
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 13. 부족구동과 보행의 역학 — 넘어짐은 발산 모드다](../part03-dynamics/lec13-underactuation-locomotion.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 15. 감속기와 전동 — 토크를 사고 속도를 파는 시장](lec15-gears-transmissions.md) ➡

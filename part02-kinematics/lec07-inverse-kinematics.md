@@ -369,3 +369,9 @@ for x_d in path:
 — **뒷받침**: 실습 5의 모델 로드·`mj_forward`·site 좌표 API.
 
 *본문·그림의 수치 실험(WE-1 해석해 검증, WE-2의 Newton 최대 스텝 57.66 rad·DLS 잔차 0.0200, WE-3의 basin 비율 44.0/45.2/10.9%)은 모두 본문 코드와 `images/lec07/gen_figs.py`의 실행 출력이다 — numpy 1.21 기준 재현 확인.*
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 06. 특이점과 조작성 — 로봇이 못 가는 방향](lec06-singularity-manipulability.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 08. 보간과 시간 파라미터화 — 학습 스택 아래에서 살아남는 최소 궤적론](lec08-interpolation-timing.md) ➡

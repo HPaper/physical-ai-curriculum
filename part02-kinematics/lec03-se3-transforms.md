@@ -351,3 +351,9 @@ URDF에서 관절 하나는 이렇게 생겼다 — `<origin>`이 부모 링크 
 
 [6] M. J. Kim et al., "OpenVLA: An Open-Source Vision-Language-Action Model," arXiv:2406.09246, 2024.6. https://arxiv.org/abs/2406.09246
 — **뒷받침**: "OpenVLA류의 ΔEEF 액션"(왜 이 강의가 필요한가, 토론 질문 4) — action space 좌표계 계약 문제의 사례, 50강과 동일 출처 계열.
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 02. 회전의 수학 — SO(3)와 그 표현들](lec02-rotation-so3.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 04. 정기구학 — 지수곱(PoE)과 DH](lec04-forward-kinematics.md) ➡

@@ -356,3 +356,9 @@ tau += N @ (Kp_n*(q_rest - d.qpos) - Kd_n*d.qvel)     # Kp_n=20, Kd_n=5
 — **뒷받침**: 번역 박스 — "메트릭으로 preconditioning한 기울기"로서의 natural gradient. $\Lambda$-가중 op-space 스텝과의 구조적 동형 비유의 원 개념.
 
 *수치 재현성: 본문·그림의 모든 수치(WE-1의 $\Lambda = \mathrm{diag}(1/3, 4/3)$과 $JM^{-1}J^\top = \mathrm{diag}(3, 3/4)$, WE-2의 RMS 170.8/57.0/0.0755 mm와 $J^\top$ lag 손계산 56.5 vs 57.0 mm, E1 검증의 해석해 대조 $1.0\times10^{-5}$ m와 Khatib/resolved-acceleration 동치 $2.1\times10^{-14}$ N·m, E2의 유효 질량 범위 0.29~22.8 kg·타원 사이각 31.7°·$m_x = 0.4028$ kg, WE-3의 $\Lambda$ 고유값 3.4/88.5/2189.5 kg·log-log 기울기 −1.998·토크 폭발 7.4×10⁶ N·m(t=2.00 s)·감쇠판 210 N·m와 251 mm, 그림 4의 셋포인트 $2.5\times10^{-12}$ mm·속도 스윕 7.07~117.1 mm vs 0.0069~0.318 mm, 흔한 오해 3의 게인 실험 17.9 mm와 $\dot e$ 변형 6.89 mm)는 `images/lec20/gen_figs.py`의, 실습 재현 수치(Part A 0.276 mm, 실습 2의 경계 스침 14.7→21.3 N·m·직선 목표 폭발 $t = 2.13$ s와 감쇠판 133 N·m, Part B의 0.832 mm/74.4°, 0.020 mm/14.4°, 전체 보상 0.0°)는 `images/lec20/check_mujoco.py`의 실행 출력이다 — numpy 1.26 / mujoco 3.2.5 기준 재현 확인.*
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 19. 관절 제어와 computed torque — 비선형을 지우는 기술](lec19-joint-control-computed-torque.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 21. 임피던스·컴플라이언스 제어 — 접촉을 다루는 법](lec21-impedance-compliance.md) ➡

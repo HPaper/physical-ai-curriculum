@@ -368,3 +368,9 @@ opt = torch.optim.SGD(net.parameters(), lr=0.03, weight_decay=1e-3)  # weight_de
 — **뒷받침**: 미니배치 SGD·학습률 스윕·정칙화의 실무 감각(§2·§4, 읽을거리 2, 2차 교육자료).
 
 *수치 재현성: 본문·캡션·코드 주석의 모든 수치는 `images/lec27/gen_figs.py`와 두 Worked Example 코드 블록을 CPU에서 실행한 출력이다(numpy 1.26 / scipy 1.15 / matplotlib 3.5, 시드 `default_rng` 고정). 구체적으로 — 그림 1: 15차 다항·N=18, 조기중단 e*=8751·val 0.122·train@end 0.016·val@end 0.888. 그림 2: 미니배치 분산이 배치 B=1..256에서 var×B 근사 상수(1/B 스케일). 그림 3: 편향-분산 U자, 최적 차수 p*=3·test 최소 0.057, 고차수에서 분산 폭발(p=12에서 84). 그림 4: 손실 곡률 최대 고유값 L=4.00·임계 학습률 2/L=0.50, 과소/적정/과대 학습률의 최종 손실초과분 0.246/6.4e-4/0.555(과대는 발산). WE-1: 전체 기울기 [-2.376, 4.691, -0.580], 배치 기울기 분산 37.5/9.4/2.3/0.58(B=1/4/16/64), var×B ≈ 37.3~37.8 상수·bias 5e-2→7e-3. WE-2: N=15에서 e*=1262·gap 0.161, N=120에서 gap 0.032. **이 토이들은 개념 재현용 CPU 시뮬레이션이며 실제 대형 모델·GPU 학습이 아니다** — 실제 VLA의 학습 규모·과적합 양상은 33·43·44강의 1차 출처를 참조.*
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 26. 신경망 = 함수 근사기](lec26-neural-networks-function-approximation.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 28. CNN과 시각 표현](lec28-cnn-visual-representations.md) ➡

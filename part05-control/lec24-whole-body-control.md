@@ -366,3 +366,9 @@ tau_ff = d.qfrc_bias[6:] - grf_dist(d)[6:]        # 피드포워드 토크 = 중
 — **뒷받침**: 실습의 `mj_inverse`/`qfrc_inverse`, `qfrc_bias`, `qfrc_applied`, `mj_jac`, `mj_contactForce` API 의미론과 표준 humanoid 모델(nq=28, nv=27, nu=21) — 11강·19강와 동일 출처.
 
 *수치 재현성: 본문·그림의 수치 중 3R 위계·가중 QP·지면반력 배분(WE-1의 충돌 0.435 m·자세 거리 2.683/1.240 rad·침해량 $3.1\times10^{-15}$, E1 재귀 3태스크의 잔차 $3.8/1.9\times10^{-15}$·$\|N_2\|=3.4\times10^{-15}$, WE-2의 30.5/204.2/371.3 mm·기울기 0.986·KKT 대조 $1.1\times10^{-14}$, WE-3·fig1·fig3의 $f_z$ 46.2/346.2 N·원뿔 여유 2.72 N·경계 51.18/65.4 N·CoP +11.5 cm)는 `images/lec24/gen_figs.py`의, MuJoCo 실습 수치(base 렌치 [0,0,400.68,0,−6.28,0], 분배 수직력 합 400.7 N, 낙상 0.97/0.92 s vs 직립 8 s·0.0 mm, 전방 밀기 30 N 회복(31.6 mm)/40 N 낙상과 capture point 환산 6.5/8.6 cm·발끝 여유 14.2 cm, 측방 20 N의 200/200→265/133 N, 발목 스텝 응답 −19.8 mm)는 `images/lec24/check_mujoco.py`의 실행 출력이다 — numpy 1.26 / scipy 1.15 / mujoco 3.2.5 기준 재현 확인.*
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 23. 모델 예측 제어(MPC) — 매 순간 최적화로 제어하기](lec23-mpc.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 25. 딥러닝, 왜 로봇에 필요한가](../part06-deep-learning/lec25-why-deep-learning.md) ➡

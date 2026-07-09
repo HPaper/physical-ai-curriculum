@@ -320,3 +320,9 @@ print(f"ZOH 평균 추종 오차: {err_zoh:.4f}")   # 보간을 넣으면 얼마
 
 [8] Hugging Face, LeRobot async inference 문서. https://huggingface.co/docs/lerobot/en/async
 — **뒷받침**: 정책–제어기 주기 분리의 실무 구현(E3의 현실판).
+
+<!-- lecture-nav -->
+
+---
+
+[📖 전체 목차](../README.md)　｜　다음: [Lec 01. 로봇 해부학 — 링크, 관절, 그리고 자유도](../part02-kinematics/lec01-robot-anatomy.md) ➡

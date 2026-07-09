@@ -349,3 +349,9 @@ for B in [2, 4, 8, 16, 32, 64]:
 — **뒷받침**: 소형·저자원 VLM이 대조학습 계열 인코더를 쓰는 최근 사례(§5, 47강 SmolVLA 백본 예고). 소관은 47강.
 
 *수치 재현성: 본문·캡션·WE의 numpy 토이 수치는 `images/lec35/gen_figs.py`와 본문 코드 블록의 실행 출력이다 — WE-1의 3×3 행렬에서 $\tau{=}1$·행 0 softmax $[0.514,0.255,0.231]$·손실 $0.6657$, total 손실 $\tau{=}1/0.5/0.1/0.07$에서 $0.7432/0.4791/0.0087/0.0011$·대각선 확률 $p_{00}$ $0.514/0.690/0.999/1.000$, WE-2 Part A의 zero-shot 최근접-텍스트 정확도 $0.97$(4클래스·100이미지·우연 0.25), Part B의 배치 $B{=}2{\to}64$에서 CLIP softmax $0.0002{\to}0.6774$·SigLIP sigmoid $0.0453{\to}0.0922$. numpy 1.26 / matplotlib 3.5 기준 재현 확인(코드는 numpy만 사용, scipy·sklearn 불필요). **이 토이는 개념 재현용 CPU 시뮬레이션이며 실제 CLIP/SigLIP 모델·가중치가 아니다**(임베딩을 인공 생성했고, 4억 쌍 학습이 아니다) — CLIP·SigLIP·SimCLR·DINO·MAE·PaliGemma·π0·SmolVLM의 실측 수치·설계는 위 [1]–[9] 1차 출처.*
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 34. ViT: 이미지를 패치 토큰으로](lec34-vit-patch-tokens.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 36. VLM 조립: LLaVA 템플릿](lec36-vlm-assembly-llava.md) ➡

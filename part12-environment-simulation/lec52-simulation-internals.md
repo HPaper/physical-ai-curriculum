@@ -348,3 +348,9 @@ flowchart TD
 — **뒷받침**: §3 표와 번역 박스의 "MJX(JAX)로 GPU 벡터화·미분가능 파이프라인" 항목.
 
 *수치 재현성: 본문·그림의 수치(WE-1의 에너지비 20,959.2·implicit 4.77118e-5·symplectic 드리프트 5.26%·RK4 결손 1.387e-5·안정 경계 2.0006/2.8287, WE-2의 침투 0.1962 mm와 log-log 기울기 2.0000·$d_{\max}$ 스윕 1.962→0.0039 mm·반발계수 $\zeta{=}0.3$→0.440 등, WE-3의 $h^*$ 측정/이론 비율 1.0000·경계 안팎 7.1배/20스텝 발산·클램프 스윕 0.049→0.1962 mm)는 모두 본문 코드 블록과 `images/lec52/gen_figs.py`의 실행 출력이다 — numpy 1.26 / mujoco 3.2.5 기준, 난수 없는 결정적 실험이라 시드 무관.*
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 51. 시뮬레이터 지형도](lec51-simulator-landscape.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 53. 합성 데이터와 도메인 랜덤화](lec53-synthetic-data-domain-randomization.md) ➡

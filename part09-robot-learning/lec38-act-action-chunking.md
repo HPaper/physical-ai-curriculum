@@ -274,3 +274,9 @@ for m in [0.01, 0.1, 0.5]:
 — **뒷받침**: ACT의 LeRobot 재구현 맥락(실습 A안), `chunk_size`·temporal ensembling 구현, PushT 벤치.
 
 *수치 재현성: 핵심 수식·Worked Example·그림의 numpy 토이 수치는 `images/lec38/gen_figs.py`와 본문 코드 블록의 실행 출력이다 — WE-1의 드리프트 표(외란0: H=1..32 → 0.0973/0.0640/0.0430/0.0276/0.0198/0.0144 단조 감소, 외란0.03: 0.1066/0.0806/0.0718/0.0756/0.0925/0.1190 U자·최소 H=4), WE-2의 이음매 저크 감소(naive 161.2×10⁻³ → 앙상블 m=0.01: 6.59×10⁻³ 24.5배 / m=0.1: 8.25×10⁻³ 19.5배 / m=0.5: 31.5×10⁻³ 5.1배; naive RMS오차 38.8×10⁻³ → 앙상블 10.2×10⁻³), temporal ensembling 정규 지수가중 손계산(m=0.1, 인덱스 0..4·i=0=가장 오래된 예측 → [0.242,0.219,0.198,0.179,0.162], 합 1.000). numpy 1.26 / scipy 1.15 / matplotlib 3.5 기준 재현 확인. **이 토이는 개념 재현용 CPU 시뮬레이션이며 실제 ACT/ALOHA 모델·가중치가 아니다** — ACT(H=100·50Hz·14차원·CVAE·temporal ensembling)·ALOHA 하드웨어의 실측·설계 수치는 위 [1] 1차 출처.*
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 37. 모방학습이 무너지는 방식](lec37-imitation-learning-failure.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 39. Diffusion Policy](lec39-diffusion-policy.md) ➡

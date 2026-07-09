@@ -316,3 +316,9 @@ for ns in [2, 5, 10, 20, 50, 100]:
 — **뒷받침**: 실습 B안(LeRobot `diffusion` 정책·PushT), Part 9의 교과서 맥락.
 
 *수치 재현성: 핵심 수식·Worked Example·그림의 numpy 토이 수치는 `images/lec39/gen_figs.py`와 본문 코드 블록의 실행 출력이다 — 다봉 데이터 두 모드 $\{-2,+2\}$·$\sigma{=}0.15$에서 MSE 최적 예측 $\mathbb E[a|o]=-0.03$(모드 사이 붕괴), DDPM(T=200) 모드 복원 $-1.995/+1.997$·커버리지 51/49%·위치오차 0.002, 스텝-품질(오차 0.05 임계) DDPM 수십 스텝(이 그리드 50, 40강 촘촘한 그리드로 ~40)·DDIM ~10스텝·flow(40강 lec44 WE-2) ~10스텝, forward $\bar\alpha_t$(t=0:1.000, 60:0.827, 199:0.132), receding horizon $H{=}16$ 생성·$h{=}8$ 실행. numpy 1.26 / matplotlib 3.5 기준 재현 확인(순수 numpy·외부 과학연산 라이브러리 불요). **이 토이는 개념 재현용 CPU 시뮬레이션이며 실제 Diffusion Policy 모델·가중치가 아니다**(denoiser를 학습 대신 해석적 참 노이즈로 대체) — Diffusion Policy·DDPM·DDIM의 실제 성능·설정은 위 [1][2][3] 1차 출처.*
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 38. ACT와 action chunking](lec38-act-action-chunking.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 40. Flow matching](lec40-flow-matching.md) ➡

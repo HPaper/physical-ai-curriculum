@@ -374,3 +374,9 @@ print("보상 있음:", np.round(d.qpos, 6))    # → [0.3 0.5] 드리프트 0
 
 [4] J. Carpentier et al., Pinocchio — 강체동역학 알고리즘 라이브러리. https://github.com/stack-of-tasks/pinocchio
 — **뒷받침**: `pin.rnea`/`pin.crba`/`pin.aba` API와 해석적 미분 제공, `pip install pin` 설치 경로(본문 §4, 실습 6). 이 환경에는 미설치라 수치 검증은 [3]의 MuJoCo와 NumPy로 수행.
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 10. 라그랑주 동역학 — 매니퓰레이터 방정식](lec10-lagrangian-dynamics.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 12. 접촉, 마찰, 파지 — 불연속의 물리](lec12-contact-friction-grasping.md) ➡

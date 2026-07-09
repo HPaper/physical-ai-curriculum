@@ -272,3 +272,9 @@ RT-2가 쓴 대형 어휘(~256k)에서는 256개가 **0.1%**에 불과하다 —
 — **뒷받침**: §3 "웹 지식 전이의 실체"(새 물체 zero-shot, 지시 패러프레이즈 강건성)의 근거 문헌 중 하나 (RT-2 [2]와 함께).
 
 *수치 재현성: RT-1/RT-2/OXE의 1차 수치(35M·13만 시연·256빈·55B·1~3Hz·1M+ 궤적·~50% 향상 등)는 위 [1]–[4]가 출처다. 핵심 수식·Worked Example의 수치는 모두 `images/lec42/gen_figs.py`의 CPU 실행 출력이다 — **본문 코드가 실제 모델이 아니라 개념(균일 이산화·AR cross-entropy·bias-variance)을 numpy로 재현한 토이**임에 유의: (a) E1·WE-2의 연속 6차원 실측/이론 비율 0.991과 그리퍼(계단신호) 예외 0.472, 6차원 전체 RMS 1.839e-04; (b) WE-1의 손계산($\Delta{=}0.3125$ mm, $k{=}139$, $\hat x{=}3.594$ mm, RMS $\Delta/\sqrt{12}{=}0.0902$ mm); (c) WE-3a·그림 3의 빈 수 스윕(N=16~1024의 실측 RMS가 이론선 $1/(N\sqrt{12})$과 일치, N=256의 정규화 RMS 1.118e-03 ≈ 범위의 0.112%); (d) WE-3b·그림 5의 vocabulary 점유율 0.100%(256k)/0.800%(32k)/3.200%(8k); (e) E2·WE-3c의 균등 cross-entropy $6\ln256{+}\ln2{=}33.96$ nats·토큰당 perplexity 256·자신있는 예측 1.67; (f) E3·WE-3c의 cross-embodiment 토이 이득 소규모 +55.0%·대규모 손해·손익분기 $n_{\text{self}}^\star{\approx}49$. 그림 2(fig1)·3(fig2)·4(fig4)·5(fig3)도 같은 스크립트가 생성. numpy 1.26 / matplotlib 3.5 기준 재현 확인, seed=42.*
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 41. 강화학습 압축 코스 — MDP·정책경사·advantage·오프라인 RL·POMDP](../part09-robot-learning/lec41-rl-crash-course.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 43. 오픈 세대 (2024) — Octo, OpenVLA, 그리고 디코딩의 재발견](lec43-open-generation.md) ➡

@@ -355,3 +355,9 @@ for arm in [0.0, 0.00768, 0.1]:        # 직결 / QDD / 하모닉 (실습 1의 J
 — **뒷받침**: 실습 3 — `armature`가 관성행렬 대각에 더해지는 로터(반사) 관성이라는 정의.
 
 *수치 재현성: 본문·그림의 모든 수치(WE-1의 37.5 Nm·5 rad/s·$J_{ref}=0.1$·로터 몫 16.7%·손끝 0.4 kg·모터가 본 부하 $5\times10^{-5}$, WE-2의 $n^*=223.6$·$a_{max}=111.8$·QDD 7.99/DYD 48.48/하모닉 83.33/서보 102.06 rad/s²·직결 환산 55.9 Nm(112배), WE-3의 66.7/78.4/163.3 N·비율 2.08·로터 몫 27.7/83.3%·기어 통과 토크 6.5/40.8 Nm, 실습 1 표의 $J_{ref}$·역구동 문턱·가속도 7.88 rad/s², 실습 3의 qacc 100.000/98.487/83.333 rad/s²·진동 주기 0.9935/1.0883 s)는 본문 코드 블록과 `images/lec15/gen_figs.py`의 실행 출력이다 — numpy 1.26 / mujoco 3.2.5 기준 재현 확인.*
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 14. 전기 모터와 전류 루프 — 힘은 어디서 오는가](lec14-motors-current-loop.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 16. QDD와 proprioceptive actuation — MIT Cheetah가 바꾼 설계 철학](lec16-qdd-integrated-actuators.md) ➡

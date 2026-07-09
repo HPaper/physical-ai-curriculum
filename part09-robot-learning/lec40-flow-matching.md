@@ -316,3 +316,9 @@ print(f"오차<=0.05 도달: flow {fmin}스텝 vs diffusion {dmin}스텝 -> {dmi
 — **뒷받침**: WE-2 diffusion 베이스라인의 전방과정·역과정·노이즈 스케줄 정식화(선형 $\beta$, $\bar\alpha_t$, VP).
 
 *수치 재현성: 본문·캡션·주석의 모든 numpy 토이 수치는 `images/lec40/gen_figs.py`와 본문 WE 코드 블록의 실행 출력이다 — WE-1의 Euler 10스텝 모드 복원 −1.961/+1.969(최대오차 0.039)·스텝별 오차 2.0/0.551/0.149/0.071/0.040/0.018/0.015(1/2/3/5/10/20/50스텝, **44강 WE-2와 정합**), WE-2의 flow {5:0.075,10:0.047,20:0.029}·diffusion {10:0.21,20:0.104,40:0.05,80:0.021}·같은 오차(≤0.05) 도달 flow 10 vs diffusion 40스텝(4배). numpy 1.26 / scipy 1.15 / matplotlib 3.5 기준 재현 확인. **이 토이는 개념 재현용 CPU 시뮬레이션이며 실제 flow/diffusion 대형 모델·가중치가 아니다** — π0(~10스텝·H=50·50Hz)의 실측은 위 [5], Diffusion Policy의 스텝 특성은 [6]의 1차 출처. flow 스텝 격차의 정확한 배수는 스케줄·솔버·타깃에 의존하며, 4배는 이 토이의 개념 값이다(요점은 "flow가 성글어도 된다"는 경향).*
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 39. Diffusion Policy](lec39-diffusion-policy.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 41. 강화학습 압축 코스 — MDP·정책경사·advantage·오프라인 RL·POMDP](lec41-rl-crash-course.md) ➡

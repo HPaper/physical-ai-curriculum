@@ -266,3 +266,9 @@ print("EEF 위치:", d.site("ee").xpos)   # WE-2의 fk()와 비교해 검증
 
 [7] K. Black et al., "π0," arXiv:2410.24164, 2024.10. https://arxiv.org/abs/2410.24164
 — **뒷받침**: "최대 18차원 action space" — DoF 표와 action 설계의 연결 사례 (50강과 동일 출처).
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 00. Physical AI 로봇 시스템 해부 — 전체 지도](../part01-orientation/lec00-system-anatomy.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 02. 회전의 수학 — SO(3)와 그 표현들](lec02-rotation-so3.md) ➡

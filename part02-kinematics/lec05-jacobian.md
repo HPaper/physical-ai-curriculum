@@ -385,3 +385,9 @@ print(np.round(jacr, 5))       # 회전 행: [[0,0],[0,0],[1,1]] — 두 관절 
 
 [4] K. Black et al., "π0: A Vision-Language-Action Flow Model for General Robot Control," arXiv:2410.24164, 2024.10. https://arxiv.org/abs/2410.24164
 — **뒷받침**: "VLA가 EEF/관절 공간 액션을 내면 하위 스택이 환전한다"는 문맥(50강과 동일 출처) — 본 강의의 동기 부여 절에서 개념적으로만 참조.
+
+<!-- lecture-nav -->
+
+---
+
+⬅ 이전: [Lec 04. 정기구학 — 지수곱(PoE)과 DH](lec04-forward-kinematics.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 06. 특이점과 조작성 — 로봇이 못 가는 방향](lec06-singularity-manipulability.md) ➡
