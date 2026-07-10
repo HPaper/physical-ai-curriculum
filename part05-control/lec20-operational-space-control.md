@@ -48,7 +48,7 @@ flowchart TB
 
 두 경로 모두 끝은 토크다. 차이는 **오차 동역학이 어느 좌표에서 선형이 되도록 설계하는가**, 그리고 특이점·여유자유도라는 골칫거리를 파이프라인의 어느 상자가 떠안는가다. 경로 ①은 그것을 IK(궤적 생성 시점)에 밀어 두고, 경로 ②는 제어 법칙 자체에 들여온다 — 공짜 점심은 없고, 위치만 옮길 수 있다(흔한 오해 1).
 
-### 2. 핵심 수식
+### 핵심 수식
 
 #### E1. 태스크 공간 동역학과 operational space 제어 — 19강의 상쇄를 손끝 좌표에서
 
@@ -158,7 +158,7 @@ $$
 
 *그림 4: (a) 고정 목표: $J^\top$ 제어는 동역학 모델 없이 기계 정밀도로 수렴. (b) 같은 원을 점점 빨리 그리게 하면 — $J^\top$의 오차는 속도에 비례해 자라고($e \approx K_d v/K_p$), op-space는 세 자릿수 아래에서 평평하다.*
 
-### 3. Worked Example
+### Worked Example
 
 #### WE-1 (손계산 + 검증): $\Lambda$를 손으로 — 자세 $q = (0, \pi/2)$
 
@@ -245,7 +245,7 @@ ts, Q, _, TAU, _ = simulate(ctrl_opspace(xd_l, xdd_l, xddd_l, damp=0.01), q0l, q
 
 처방도 7강과 같다: $\Lambda_\delta = (JM^{-1}J^\top + \delta I)^{-1}$ — ridge regression과 같은 수식이고, "정확한 상쇄"를 "유효 질량 상한 $1/\delta$"와 맞바꾼다. 관절 공간 CT에는 이 문제가 아예 없다는 것(오차 동역학에 $J$가 등장하지 않는다)이 경로 ①의 조용한 장점이다 — 특이점은 로봇의 속성이 아니라 **태스크 좌표 선택의 속성**이다(토론 질문 3).
 
-### 4. 세 제어기는 언제 무엇을 쓰나
+### 2. 세 제어기는 언제 무엇을 쓰나
 
 | | 관절 CT (19강) | $J^\top$ (E3) | op-space (E1) |
 |---|---|---|---|
@@ -347,7 +347,7 @@ tau += N @ (Kp_n*(q_rest - d.qpos) - Kd_n*d.qvel)     # Kp_n=20, Kd_n=5
 — **뒷받침**: Ch.8(Motion Control) — operational space PD + 중력 보상($J^\top$ 제어, E3)의 Lyapunov 안정성 논증(에너지 함수 $\frac{1}{2}\dot q^\top M\dot q + \frac{1}{2}e^\top K_p e$)과 관절/작업공간 제어 구조 비교.
 
 [4] J. Nakanishi, R. Cory, M. Mistry, J. Peters, S. Schaal, "Operational Space Control: A Theoretical and Empirical Comparison," International Journal of Robotics Research, vol. 27, no. 6, pp. 737–757, 2008. https://doi.org/10.1177/0278364908091463
-— **뒷받침**: 읽을거리 3 — 관절 분해·$J^\top$·op-space 계열 제어기의 통일 표기 비교(본문 §4 비교표의 문헌적 근거).
+— **뒷받침**: 읽을거리 3 — 관절 분해·$J^\top$·op-space 계열 제어기의 통일 표기 비교(본문 §2 비교표의 문헌적 근거).
 
 [5] Google DeepMind, MuJoCo 문서. https://mujoco.readthedocs.io
 — **뒷받침**: 실습의 `mj_jacSite`(사이트 자코비안), `mj_fullM`, `qfrc_bias`(= $C\dot q+g$), `mj_integratePos`, `qfrc_applied` API 의미론과 기본 적분기(semi-implicit Euler) 사양 (11강·19강와 동일 출처).

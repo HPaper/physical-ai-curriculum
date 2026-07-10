@@ -47,7 +47,7 @@ flowchart LR
 
 정방향(모터→관절)만 보면 감속기는 순수한 이득처럼 보인다. 오늘 강의의 요점은 **역방향 화살표**다 — 관절을 움직이는 모든 것(제어기 자신, 외부 충격, teleop하는 사람 손)은 로터를 $n$배 속도로 끌고 다녀야 하고, 그 비용이 $n^2$으로 청구된다.
 
-### 2. 핵심 수식
+### 핵심 수식
 
 #### E1. 기본 교환: $\tau_{out} = n\,\eta\,\tau_{in}$, $\omega_{out} = \omega_{in}/n$
 
@@ -98,13 +98,13 @@ a(n) = \frac{n\,\tau_m}{J_L + n^2 J_m}, \qquad
 n^* = \sqrt{\frac{J_L}{J_m}}, \quad a_{max} = \frac{\tau_m}{2\sqrt{J_m J_L}}
 $$
 
-**단서**: 이것은 "정지 부하의 순간 가속 최대화"라는 특정 목적의 최적일 뿐이다. 실제 설계는 속도 요구·열·충격·역구동성을 함께 저울질하며, 그래서 QDD는 **일부러 $n \ll n^*$을 고른다** (4절, 16강).
+**단서**: 이것은 "정지 부하의 순간 가속 최대화"라는 특정 목적의 최적일 뿐이다. 실제 설계는 속도 요구·열·충격·역구동성을 함께 저울질하며, 그래서 QDD는 **일부러 $n \ll n^*$을 고른다** (2절, 16강).
 
 ![가속도 vs 감속비](../images/lec15/fig2_accel_vs_ratio.png)
 
 *그림 2: 같은 모터($\tau_m = 0.5$ Nm, $J_m = 10^{-5}$)로 낼 수 있는 부하 가속도. $J_L = 0.5$일 때 최적은 $n^* = 224$이고, 실제 로봇들의 감속비(QDD 8, 하모닉 100, 버스서보 345)는 각기 다른 이유로 최적에서 벗어나 있다. (생성 코드: `../images/lec15/gen_figs.py`)*
 
-### 3. Worked Example
+### Worked Example
 
 #### WE-1 (손계산): 하모닉 관절의 환전 명세서
 
@@ -217,7 +217,7 @@ for name, n, J_m in [("링크만", 0, 0.0), ("QDD n=8", 8, 1.2e-4), ("하모닉 
 
 *그림 3: (a) 피크 접촉력 vs 감속비 — 감속비가 커질수록 같은 착지가 점점 센 충돌이 된다. (b) 충격 에너지의 행선지 — 하모닉은 83%가 기어 이빨을 지나야 한다. 16강(QDD 철학)의 출발점이 되는 그림.*
 
-### 4. 감속기 동물원 — 무엇을 사고 무엇을 파는가
+### 2. 감속기 동물원 — 무엇을 사고 무엇을 파는가
 
 이제 49강의 비교표를 이 강의의 언어로 다시 쓴다. 각 유형은 트레이드오프 공간의 다른 꼭짓점이다:
 
@@ -340,16 +340,16 @@ for arm in [0.0, 0.00768, 0.1]:        # 직결 / QDD / 하모닉 (실습 1의 J
 — **뒷받침**: §8.9.1 — E1의 $\tau_{gear} = \eta G \tau_{motor}$, DC 모터 모델($\tau = k_t I$, 열 한계); §8.9.2 — E2의 apparent(reflected) inertia $G^2 I_{rotor}$와 "고감속에서 관절 관성이 로터에 지배된다"는 예제(흔한 오해 2); §8.9.4 — 마찰이 기어비와 함께 커진다는 논의(흔한 오해 3).
 
 [2] J. W. Sensinger, J. H. Lipsey, "Cycloid vs. harmonic drives for use in high ratio, single stage robotic transmissions," IEEE ICRA, 2012. https://doi.org/10.1109/ICRA.2012.6224739
-— **뒷받침**: 4절 — 싸이클로이드와 하모닉의 단일단 고감속 트레이드오프(백래시·강성·토크 밀도) 정량 비교의 표준 출처 (49강과 동일 문헌 재사용).
+— **뒷받침**: 2절 — 싸이클로이드와 하모닉의 단일단 고감속 트레이드오프(백래시·강성·토크 밀도) 정량 비교의 표준 출처 (49강과 동일 문헌 재사용).
 
 [3] ROBOTIS, DYD(Dynamixel Drive) eManual. https://emanual.robotis.com/docs/en/all-dyd/
-— **뒷받침**: 4절 표와 WE-3 — DYD 감속비 33~99:1, 백래시 <3 arcmin, DYD-14-051 정격 3.7 Nm/비상정지 43.2 Nm, 효율 60~70% (E1의 $\eta$ 예시). WE-2의 $n=51$은 DYD-14-051의 감속비.
+— **뒷받침**: 2절 표와 WE-3 — DYD 감속비 33~99:1, 백래시 <3 arcmin, DYD-14-051 정격 3.7 Nm/비상정지 43.2 Nm, 효율 60~70% (E1의 $\eta$ 예시). WE-2의 $n=51$은 DYD-14-051의 감속비.
 
 [4] Feetech, STS3215 제품 페이지 (제조사 공식). https://www.feetechrc.com/en/2020-05-13_56655.html
-— **뒷받침**: 4절 표·WE-2·실습 1의 버스서보 감속비 1/345("1:345 gear combination"), 다단 스퍼(금속 기어) 구조 — 49강 표와 동일 수치.
+— **뒷받침**: 2절 표·WE-2·실습 1의 버스서보 감속비 1/345("1:345 gear combination"), 다단 스퍼(금속 기어) 구조 — 49강 표와 동일 수치.
 
 [5] P. M. Wensing, A. Wang, S. Seok, D. Otten, J. Lang, S. Kim, "Proprioceptive Actuator Design in the MIT Cheetah: Impact Mitigation and High-Bandwidth Physical Interaction for Dynamic Legged Robots," IEEE Transactions on Robotics, 33(3), 2017. https://doi.org/10.1109/TRO.2016.2640183
-— **뒷받침**: 4절 — QDD(저감속 유성 + 대구경 모터)의 설계 철학과 충격 완화 논거; WE-3·그림 3의 "대구경 토크 로터" 파라미터 방향성(감속비 낮추고 로터 크게). 상세는 16강에서 본격 인용.
+— **뒷받침**: 2절 — QDD(저감속 유성 + 대구경 모터)의 설계 철학과 충격 완화 논거; WE-3·그림 3의 "대구경 토크 로터" 파라미터 방향성(감속비 낮추고 로터 크게). 상세는 16강에서 본격 인용.
 
 [6] Google DeepMind, MuJoCo 문서 — XML reference, joint/`armature`. https://mujoco.readthedocs.io
 — **뒷받침**: 실습 3 — `armature`가 관성행렬 대각에 더해지는 로터(반사) 관성이라는 정의.

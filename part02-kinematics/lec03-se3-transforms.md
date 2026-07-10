@@ -40,7 +40,7 @@ $$
 
 이제 포즈의 합성 = 행렬 곱, 역 = 역행렬. 부기(bookkeeping)가 선형대수가 된다. 이 4×4 행렬들의 집합이 $SE(3)$(Special Euclidean group)다.
 
-### 2. 핵심 수식
+### 핵심 수식
 
 #### E1. 동차변환의 정의·합성·역변환
 
@@ -92,7 +92,7 @@ $$
 
 여기서 $[\omega]$는 2강에서 본 3×3 반대칭 행렬이다. 2강의 Rodrigues 공식($SO(3)$의 지수좌표)이 $SE(3)$로 확장된 것 — 오늘은 "이런 물건이 있고 4×4 행렬과 왕복 가능하다"까지만. 이 표현이 4강에서 FK의 본류(PoE)가 되고, 5강에서 자코비안의 열이 된다.
 
-### 3. Worked Example
+### Worked Example
 
 #### WE-1 (손계산 + 코드): 카메라-로봇-물체 체인 — hand-eye 문제 맛보기
 
@@ -237,7 +237,7 @@ print(T @ np.array([0,0,0,1.]))           # → [ 1. -1.  0.  1.]
 
 행렬 지수에 넣었을 뿐인데 회전($R=\mathrm{Rot}(\hat z,90°)$)과 병진($p=(1,-1,0)$)이 **한꺼번에, 올바르게** 나온다 — 축 하나 + 각도 하나(6개 숫자 $\mathcal{S}\theta$)가 4×4 동차변환 전체를 인코딩한다. 관절 하나가 만드는 운동이 정확히 이런 나사 운동이므로, 4강에서 FK가 $T = e^{[\mathcal{S}_1]\theta_1} \cdots e^{[\mathcal{S}_n]\theta_n} M$이라는 지수들의 곱(PoE)이 된다.
 
-### 4. 프레임 그래프로 보기 — 시스템 전체의 좌표계 계약
+### 2. 프레임 그래프로 보기 — 시스템 전체의 좌표계 계약
 
 실제 시스템은 프레임이 수십 개다. 변환들을 그래프로 그리면 관리가 된다:
 
@@ -263,7 +263,7 @@ graph LR
 
 "쿼터니언 순서"까지 적는 것이 과하다고 느껴진다면 — (w,x,y,z)와 (x,y,z,w)의 혼용은 scipy와 일부 로봇 SDK 사이에서 실제로 일어나는 사고다(2강에서 본 표현 다양성의 대가). 계약은 아무리 자세해도 지나치지 않다.
 
-### 5. DH 규약 vs URDF 방식 — 같은 것을 적는 두 문화
+### 3. DH 규약 vs URDF 방식 — 같은 것을 적는 두 문화
 
 로봇의 기구 구조(링크 간 고정 오프셋 + 관절축)를 적는 표기법이 역사적으로 두 갈래다.
 
@@ -328,7 +328,7 @@ URDF에서 관절 하나는 이렇게 생겼다 — `<origin>`이 부모 링크 
 
 1. **MR §3.3.1~3.3.2** (~40분): 동차변환·표기 규율·twist의 원전. §3.3.3(지수좌표 상세 유도)은 4강 직전에 읽으면 된다.
 2. **ROS REP 103 "Standard Units of Measure and Coordinate Conventions"** (~10분): 좌표계 계약을 실무 표준으로 못박은 짧은 문서 — "계약을 문서화한다"가 무엇인지의 모범.
-3. (선택) **URDF joint 스펙** (wiki.ros.org/urdf/XML/joint, ~10분): `<origin>`/`<axis>`의 공식 정의 — 본문 §5의 원자료.
+3. (선택) **URDF joint 스펙** (wiki.ros.org/urdf/XML/joint, ~10분): `<origin>`/`<axis>`의 공식 정의 — 본문 §3의 원자료.
 
 ## 자가 점검
 
@@ -343,19 +343,19 @@ URDF에서 관절 하나는 이렇게 생겼다 — `<origin>`이 부모 링크 
 > 웹 문서는 2026-07-08 접속 기준.
 
 [1] K. Lynch, F. Park, "Modern Robotics: Mechanics, Planning, and Control," Cambridge Univ. Press, 2017. 무료 PDF: https://hades.mech.northwestern.edu/images/7/7f/MR.pdf
-— **뒷받침**: §3.3.1 — 동차변환의 정의·합성·역변환($T^{-1}=[R^T, -R^Tp]$), $T_{ab}$ 표기와 아래첨자 소거 규칙, 변환 행렬의 세 가지 용법; §3.3.2 — twist, $se(3)$, 나사 축과 $v=-\omega\times q$; §3.3.3 — 지수좌표 $T=e^{[\mathcal{S}]\theta}$, Chasles–Mozzi 정리; 부록 C — DH 파라미터와 변종 논의. 본문 E1~E3와 §5의 근거.
+— **뒷받침**: §3.3.1 — 동차변환의 정의·합성·역변환($T^{-1}=[R^T, -R^Tp]$), $T_{ab}$ 표기와 아래첨자 소거 규칙, 변환 행렬의 세 가지 용법; §3.3.2 — twist, $se(3)$, 나사 축과 $v=-\omega\times q$; §3.3.3 — 지수좌표 $T=e^{[\mathcal{S}]\theta}$, Chasles–Mozzi 정리; 부록 C — DH 파라미터와 변종 논의. 본문 E1~E3와 §3의 근거.
 
 [2] Open Robotics, URDF XML 사양 (joint). http://wiki.ros.org/urdf/XML/joint
-— **뒷받침**: §5의 `<origin xyz rpy>`·`<axis>` 의미(부모→자식 고정 변환 + 관절축), "URDF는 DH가 아니다"(흔한 오해 4).
+— **뒷받침**: §3의 `<origin xyz rpy>`·`<axis>` 의미(부모→자식 고정 변환 + 관절축), "URDF는 DH가 아니다"(흔한 오해 4).
 
 [3] T. Foote 외, ROS REP 103: "Standard Units of Measure and Coordinate Conventions." https://www.ros.org/reps/rep-0103.html
 — **뒷받침**: 좌표계 방향·단위 계약의 실무 표준 사례 (읽을거리 2, 토론 질문 7).
 
 [4] J. J. Craig, "Introduction to Robotics: Mechanics and Control," 3rd ed., Pearson, 2005.
-— **뒷받침**: modified DH 규약(§5 표의 "변종이 둘"의 한쪽) — standard DH와의 차이는 MR 부록 C에서도 대조됨.
+— **뒷받침**: modified DH 규약(§3 표의 "변종이 둘"의 한쪽) — standard DH와의 차이는 MR 부록 C에서도 대조됨.
 
 [5] Google DeepMind, MuJoCo 문서. https://mujoco.readthedocs.io
-— **뒷받침**: 실습 5의 `body xpos/xmat`(base 기준 포즈) 의미와 MJCF의 body `pos`/`quat` 방식(§5 표의 URDF/MJCF 열).
+— **뒷받침**: 실습 5의 `body xpos/xmat`(base 기준 포즈) 의미와 MJCF의 body `pos`/`quat` 방식(§3 표의 URDF/MJCF 열).
 
 [6] M. J. Kim et al., "OpenVLA: An Open-Source Vision-Language-Action Model," arXiv:2406.09246, 2024.6. https://arxiv.org/abs/2406.09246
 — **뒷받침**: "OpenVLA류의 ΔEEF 액션"(왜 이 강의가 필요한가, 토론 질문 4) — action space 좌표계 계약 문제의 사례, 50강과 동일 출처 계열.

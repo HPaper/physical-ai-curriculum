@@ -34,7 +34,7 @@
 
 이름에 주의: 딥러닝 직관으로는 "역(inverse)"이 붙은 쪽이 어려울 것 같지만, 여기서는 **역동역학이 쉬운 쪽**이다(흔한 오해 2). 이 절의 목표는 ID를 완전히 손에 넣고, FD를 ID로부터 조립하는 것이다.
 
-### 2. 핵심 수식
+### 핵심 수식
 
 #### E1. 단일 강체의 뉴턴-오일러 방정식
 
@@ -112,7 +112,7 @@ flowchart LR
     RNEA -. "h = ID(q, q̇, 0)" .-> SOLVE
 ```
 
-### 3. Worked Example
+### Worked Example
 
 공통 설정: 1강과 같은 기하($l_1=1.0$, $l_2=0.6$ m)의 2링크 평면 암에 점질량 $m_1=2.0$, $m_2=1.0$ kg을 각 링크 끝에 두고, 중력 $g=9.81$ m/s² ($-y$ 방향). 검산용 폐형식은 10강에서 유도한 매니퓰레이터 방정식에 점질량 조건($l_{ci}=l_i$, $I_i=0$)을 대입해 얻는다.
 
@@ -268,13 +268,13 @@ print(dd.qfrc_inverse, tau_rod)
 
 ![O(n) 스케일링](../images/lec11/fig3_scaling.png)
 
-### 4. 라이브러리가 실제로 쓰는 것
+### 2. 라이브러리가 실제로 쓰는 것
 
 - **MuJoCo**: 바이어스 힘($C\dot q + g$)은 RNE로, 관성행렬 $M$은 CRB로 계산하고, $M$을 관절 트리의 희소성을 살린 $L^\top DL$ 분해로 푼다 [3]. 즉 FD를 ABA가 아니라 "CRBA + 희소 분해" 경로로 푼다 — 접촉 제약(12강)을 같은 분해로 함께 처리하기 위해서다. `data.qfrc_bias`가 RNE의 출력이고, `mj_inverse`가 ID 전체다.
 - **Pinocchio**: Featherstone 표기 그대로 `pin.rnea`, `pin.crba`, `pin.aba`를 노출한다 [4]. 알고리즘의 해석적 미분(∂τ/∂q 등)까지 제공해서 최적화 기반 제어(23강)와 학습 파이프라인에서 널리 쓰인다. 이 강의 실습 환경에는 미설치라 검증은 MuJoCo/NumPy로 했지만, `pip install pin` 한 줄이면 오늘 만든 `rnea_planar`와 같은 답을 내는 산업급 구현을 쓸 수 있다.
 - 오늘 직접 짠 평면 RNEA는 이 라이브러리들의 **최소 모형**이다. 공간(3D) 버전은 E2의 6차원 재귀로 확장되고(MR §8.3), 트리 구조(휴머노이드)로도, 부유 기저(floating base)로도 일반화된다 [2].
 
-### 5. 이 알고리즘은 스택 어디에 있는가
+### 3. 이 알고리즘은 스택 어디에 있는가
 
 오늘 배운 것이 앞으로 어디서 다시 등장하는지 좌표를 찍어 두자:
 
@@ -374,10 +374,10 @@ print("보상 있음:", np.round(d.qpos, 6))    # → [0.3 0.5] 드리프트 0
 — **뒷받침**: RNEA($O(n)$ 역동역학, Ch.5)·CRBA(관성행렬 조립, Ch.6)·ABA($O(n)$ 순동역학과 articulated-body inertia, Ch.7)가 계산 강체동역학의 표준 3종이라는 본문 주장, 트리·부유 기저로의 일반화.
 
 [3] Google DeepMind, MuJoCo 문서 — Computation 장. https://mujoco.readthedocs.io/en/stable/computation/index.html
-— **뒷받침**: MuJoCo가 바이어스 힘에 RNE, 관성행렬에 CRB, 그리고 트리 희소성을 살린 $L^\top DL$ 분해를 쓴다는 서술(본문 §4, 흔한 오해 3, 토론 질문 5); `qfrc_bias` $= C\dot q + g$, `mj_inverse`의 의미(WE-3, 실습).
+— **뒷받침**: MuJoCo가 바이어스 힘에 RNE, 관성행렬에 CRB, 그리고 트리 희소성을 살린 $L^\top DL$ 분해를 쓴다는 서술(본문 §2, 흔한 오해 3, 토론 질문 5); `qfrc_bias` $= C\dot q + g$, `mj_inverse`의 의미(WE-3, 실습).
 
 [4] J. Carpentier et al., Pinocchio — 강체동역학 알고리즘 라이브러리. https://github.com/stack-of-tasks/pinocchio
-— **뒷받침**: `pin.rnea`/`pin.crba`/`pin.aba` API와 해석적 미분 제공, `pip install pin` 설치 경로(본문 §4, 실습 6). 이 환경에는 미설치라 수치 검증은 [3]의 MuJoCo와 NumPy로 수행.
+— **뒷받침**: `pin.rnea`/`pin.crba`/`pin.aba` API와 해석적 미분 제공, `pip install pin` 설치 경로(본문 §2, 실습 6). 이 환경에는 미설치라 수치 검증은 [3]의 MuJoCo와 NumPy로 수행.
 
 <!-- lecture-nav -->
 
