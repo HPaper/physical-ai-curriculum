@@ -345,4 +345,4 @@ delta = Z[1:] - Z[:-1]                                         # 프레임차 = 
 
 ---
 
-⬅ 이전: [Lec 64. 논문 읽기 프레임워크](lec64-reading-papers-framework.md)　｜　[📖 전체 목차](../README.md)
+⬅ 이전: [Lec 64. 논문 읽기 프레임워크](lec64-reading-papers-framework.md)　｜　[📖 전체 목차](../README.md)　｜　다음: [Lec 66. World Model 기반 Physical AI — 예측이 정책이 되기까지](lec66-world-models-physical-ai.md) ➡
